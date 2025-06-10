@@ -1,28 +1,43 @@
-import React, { useState } from 'react';
-import { Logo } from './components/Logo';
-import { Button } from './components/Button';
-import { LoginScreen } from './components/LoginScreen';
-import HomeScreen from './components/HomeScreen'; // Import the new HomeScreen
+import React, { useState } from "react";
+import { Logo } from "./src/components/ui/Logo";
+import { Button } from "./src/components/ui/Button";
+import { LoginScreen } from "./src/components/screens/LoginScreen";
+import HomeScreen from "./src/components/screens/HomeScreen";
+import MensaScreen from "./src/components/screens/MensaScreen";
 
 const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<'welcome' | 'login' | 'home'>('welcome');
+  const [currentView, setCurrentView] = useState<
+    "welcome" | "login" | "home" | "mensa"
+  >("welcome");
 
   const handleContinueToLogin = () => {
-    setCurrentView('login');
+    setCurrentView("login");
   };
 
   const handleLogin = (username?: string, password?: string) => {
     console.log("Login attempt with:", { username, password });
     // For test purposes, login always works even with empty credentials
-    setCurrentView('home');
+    setCurrentView("home");
   };
 
-  if (currentView === 'login') {
+  const handleNavigateToMensa = () => {
+    setCurrentView("mensa");
+  };
+
+  const handleNavigateToHome = () => {
+    setCurrentView("home");
+  };
+
+  if (currentView === "login") {
     return <LoginScreen onLogin={handleLogin} />;
   }
 
-  if (currentView === 'home') {
-    return <HomeScreen />;
+  if (currentView === "home") {
+    return <HomeScreen onNavigateToMensa={handleNavigateToMensa} />;
+  }
+
+  if (currentView === "mensa") {
+    return <MensaScreen onNavigateToHome={handleNavigateToHome} />;
   }
 
   // Welcome Screen View (default)

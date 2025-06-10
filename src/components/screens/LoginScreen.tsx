@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { Logo } from "./Logo";
-import { Button } from "./Button";
-
-interface LoginScreenProps {
-  onLogin: (username?: string, password?: string) => void;
-}
+import { Logo } from "../ui/Logo";
+import { Button } from "../ui/Button";
+import type { LoginScreenProps } from "../../types";
 
 export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   const [username, setUsername] = useState("");

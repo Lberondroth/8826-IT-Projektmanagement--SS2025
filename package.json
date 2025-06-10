@@ -4,7 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently --names \"FRONTEND,BACKEND\" --prefix-colors \"cyan,green\" \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "vite",
+    "dev:backend": "cd backend && python app.py",
+    "dev:frontend-only": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -13,9 +16,15 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/postcss": "^4.1.8",
     "@types/node": "^22.14.0",
     "@types/react": "^19.1.7",
     "@types/react-dom": "^19.1.6",
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.2",
+    "postcss": "^8.5.4",
+    "tailwindcss": "^4.1.8",
     "typescript": "~5.7.2",
     "vite": "^6.2.0"
   }
