@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="de-DE">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reduzierte Campus Map Kamp Lintfort</title>
+    <link rel="stylesheet" id="panellium-css-css" href="./Virtuelle Campus Map Kamp Lintfort - TransRegINT - Hochschule Rhein-Waal_files/pannellum.css" media="all">
+    <link rel="stylesheet" id="wpvr-css" href="./Virtuelle Campus Map Kamp Lintfort - TransRegINT - Hochschule Rhein-Waal_files/wpvr-public.css" media="all">
+    <link rel="stylesheet" id="wpvrfontawesome-css" href="./Virtuelle Campus Map Kamp Lintfort - TransRegINT - Hochschule Rhein-Waal_files/all.css" media="all"> <!-- Für Icons in Controls/Hotspots -->
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: Arial, sans-serif; }
+        #master-container { width: 100% !important; height: 100vh !important; background: #f0f0f0; }
+        .pnlm-load-button { display: none !important; }
+
+        /* Essentielle Styles für Hotspots und Tooltips (aus Original extrahiert/vereinfacht) */
+        .placechange { height: 50px; width: 75px; background-repeat: no-repeat; background-position: center center; background-size: contain; border-radius: 12px; cursor: pointer; }
+        .doorinside { height: 50px; width: 57.91px; background-repeat: no-repeat; background-position: center; background-size: contain; cursor: pointer; }
+        .infoicon { height: 50px; width: 50px; background-repeat: no-repeat; background-position: center; background-size: contain; cursor: pointer; }
+
+        .placechange { background-image: url("https://transform-hsrw.org/wp-content/uploads/2023/12/standort-wechsel-icon.png"); }
+        .doorinside { background-image:url("https://transform-hsrw.org/wp-content/uploads/2024/02/standort-icon.png"); }
+        .infoicon { background-image:url("https://transform-hsrw.org/wp-content/uploads/2024/02/informations-icon.png"); }
+
+        .pnlm-hotspot-base span { /* Tooltip-Text Container */
+            background: rgba(0,0,0,0.7); color: white; padding: 5px 8px; border-radius: 3px;
+            white-space: pre-wrap; font-size: 14px; text-align: center;
+            /* Positionierung relativ zum Hotspot, Pannellum überschreibt dies ggf. dynamisch */
+        }
+
+        /* Floor Map Styles */
+        .wpvr-floor-map {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            max-width: 250px; /* Anpassbar */
+            max-height: 200px; /* Anpassbar */
+            border: 2px solid #555;
+            background-color: rgba(255,255,255,0.8);
+            z-index: 1000;
+            padding: 5px;
+            border-radius: 5px;
+            display: block !important; /* Sicherstellen, dass es sichtbar ist */
+        }
+        .wpvr-floor-map img {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .floor-plan-pointer {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: red !important; /* Farbe für Sichtbarkeit */
+            border-radius: 50%;
+            border: 2px solid white;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 5px black;
+            z-index: 1001;
+        }
+        .floor-plan-pointer.add-pulse {
+            animation: pulseAnimation 1.5s infinite;
+        }
+        .floor-plan-pointer svg.floor-pointer-flash { display:none; /* Vereinfachung: Flash-SVG erstmal ausblenden */}
+        .floor-plan-pointer svg.floor-pointer-circle {display: none; /* Kreis wird durch CSS gemacht */}
+
+        @keyframes pulseAnimation {
+            0% { box-shadow: 0 0 0 0px rgba(255, 0, 0, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0px rgba(255, 0, 0, 0); }
+        }
+        .floor_map_button { position: absolute; top: 10px; right: 50px; z-index: 1002; background: white; padding: 5px; border-radius: 3px; cursor: pointer; border: 1px solid #ccc; }
+        .floor_map_button i { font-size: 18px; color: #333; }
+
+        /* Info Box (vereinfacht) */
+        .custom-ifram-wrapper, .wpvr-hotspot-tweak-contents-wrapper {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            z-index: 10001; /* Über Pannellum-Controls */
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: none; /* Standardmäßig ausblenden */
+        }
+        .custom-ifram-wrapper .cross, .wpvr-hotspot-tweak-contents-wrapper .cross {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            line-height: 1;
+        }
+        .custom-ifram-flex, .wpvr-hotspot-tweak-contents-flex { padding-top: 20px; /* Platz für Schließen-Button */ }
+        .custom-ifram p, .wpvr-hotspot-tweak-contents p { margin-bottom: 10px; }
+        .custom-ifram a, .wpvr-hotspot-tweak-contents a { color: #3973B8; }
+    </style>
+</head>
+<body>
+
+    <div id="master-container" class="wpvr-cardboard">
+        <!-- Pano 2566 ist für Cardboard-Modus, für eine Minimalversion nicht unbedingt initial sichtbar -->
+        <div id="pano2566" class="pano-wrap pano-left pnlm-container" style="width: 49%; border-radius:; display: none;">
+             <div id="center-pointer2566" class="vr-pointer-container" style="display:none"><span class="center-pointer"></span></div>
+        </div>
+        <div id="pano566" class="pano-wrap pano-right pnlm-container" style="width: 100%;">
+            <!-- Haupt-Panorama-Anzeige -->
+            <div id="center-pointer566" class="vr-pointer-container" style="display:none"><span class="center-pointer"></span></div>
+
+            <!-- Floor Map Button -->
+            <div class="floor_map_button" id="floor_map_button_566">
+                <div class="ctrl" id="floor_map_target_566"><i class="fas fa-map"></i></div>
+            </div>
+
+            <!-- Floor Map Container -->
+            <div class="wpvr-floor-map" id="wpvr-floor-map566" style="display: block;"> <!-- Startet sichtbar -->
+                <!-- close-floor-map-plan kann via JS gesteuert werden, hier für Einfachheit entfernt -->
+                <img decoding="async" loading="lazy" src="https://transform-hsrw.org/wp-content/uploads/2024/02/karte-campus-kamp-linfort-2.5-de.png" alt="Campus Map">
+                <!-- Pointer werden dynamisch via JavaScript hinzugefügt, basierend auf Szenen -->
+            </div>
+
+            <!-- Container für Info-Hotspot-Inhalte (vereinfacht) -->
+            <div class="wpvr-hotspot-tweak-contents-wrapper" style="display: none;">
+                <i class="fa fa-times cross" data-id="566">X</i>
+                <div class="wpvr-hotspot-tweak-contents-flex">
+                    <div class="wpvr-hotspot-tweak-contents">
+                        <!-- Inhalt wird hier von JS geladen -->
+                    </div>
+                </div>
+            </div>
+             <div class="custom-ifram-wrapper" style="display: none;">
+                <i class="fa fa-times cross" data-id="566">X</i>
+                <div class="custom-ifram-flex">
+                    <div class="custom-ifram">
+                        <!-- Info-Inhalt wird dynamisch von JS geladen -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./Virtuelle Campus Map Kamp Lintfort - TransRegINT - Hochschule Rhein-Waal_files/jquery.min.js.Download"></script>
+    <script src="./Virtuelle Campus Map Kamp Lintfort - TransRegINT - Hochschule Rhein-Waal_files/pannellum.js.Download"></script>
+    <script src="./Virtuelle Campus Map Kamp Lintfort - TransRegINT - Hochschule Rhein-Waal_files/libpannellum.js.Download"></script>
+    <!-- wpvr-pro-public.js und wpvr-public.js sind evtl. für spezifische WPVR features, für pures Pannellum nicht zwingend -->
+    <script src="./Virtuelle Campus Map Kamp Lintfort - TransRegINT - Hochschule Rhein-Waal_files/wpvr-public.js.Download"></script>
+
+
+    <script>
+    (function ($) {
+        jQuery(document).ready(function() {
+            // Gekürzte und angepasste Version der Pannellum-Initialisierung
+            var response = [{"panoid":"pano566"},{
+                "autoLoad":true,
+                "showControls":true,
+                "orientationSupport":"false",
+                "compass":true, // Kompass kann nützlich sein
+                "orientationOnByDefault":false,
+                "mouseZoom":true,
+                "draggable":true,
+                "disableKeyboardCtrl":false,
+                "keyboardZoom":true,
+                "preview":"", // Kann leer bleiben oder ein kleines Vorschaubild sein
+                "default":{"firstScene":"campusmitte","sceneFadeDuration":1000},
+                "scenes":{
+                    "GFL01":{"title":"Außenbereich GFL01","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2023\/12\/01-Von-Eingang-zu-Gebaeude-3-aus_IMG_20231023_104616_00_135.jpg","hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[{"pitch":-3.24,"yaw":-157.94,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zum Green FabLab<\/p>","sceneId":"GFL03","targetYaw":-163.86},{"pitch":-2.94,"yaw":5.39,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zum Campus<\/p>","sceneId":"campusmitte","targetYaw":-94.91}]},
+                    "GFL03":{"title":"Außenbereich GFL03","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2023\/12\/03_IMG_20231023_104853_00_139.jpg","hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[{"pitch":-0.32,"yaw":-164.13,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>weiter zum Green FabLab<\/p>","sceneId":"GFL04","targetYaw":-132.35},{"pitch":-7.35,"yaw":127.32,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Campus<\/p>","sceneId":"GFL01","targetYaw":3.05}]},
+                    "GFL04":{"title":"Außenbereich GFL04","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2023\/12\/04_IMG_20231023_105104_00_142.jpg","hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[{"pitch":-4.95,"yaw":-156.38,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>weiter zum Green FabLab<\/p>","sceneId":"GFL05","targetYaw":-150.30},{"pitch":-7.38,"yaw":54.78,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Campus<\/p>","sceneId":"GFL03","targetYaw":126.18}]},
+                    "GFL05":{"title":"Außenbereich GFL05","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2023\/12\/05_IMG_20231023_105230_00_143.jpg","hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[{"pitch":-9.88,"yaw":-17.37,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Campus<\/p>","sceneId":"GFL04","targetYaw":46.85},{"pitch":-6.20,"yaw":-158.19,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>weiter zum Green FabLab<\/p>","sceneId":"GFL06","targetYaw":15.18}]},
+                    "GFL06":{"title":"Außenbereich GFL06","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2023\/12\/06_IMG_20231023_105525_00_146.jpg","hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[{"pitch":-6.50,"yaw":-147.70,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Campus<\/p>","sceneId":"GFL05","targetYaw":-17.23},{"pitch":-8.33,"yaw":15.20,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>weiter zum Green FabLab<\/p>","sceneId":"GFL07","targetYaw":-132.42}]},
+                    "GFL07":{"title":"Eingang Green FabLab","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2023\/12\/07-Eingang-Green-FabLab_IMG_20231023_105842_00_148.jpg","hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[{"pitch":-8.02,"yaw":-32.59,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Campus<\/p>","sceneId":"GFL06","targetYaw":-148.16},{"pitch":-10.34,"yaw":-134.81,"type":"scene","cssClass":"doorinside","createTooltipArgs":"<p>Gebäude 08: Ins Green FabLab<\/p>","sceneId":"GFL08","targetYaw":-3.03}]},
+                    "GFL08":{"title":"Green FabLab Innen","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2023\/12\/08-Green-FabLab_GS__0084.jpg","pitch":0,"yaw":11.13,"hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[
+                        {"pitch":0.44,"yaw":10.60,"type":"info","cssClass":"infoicon", "clickHandlerArgs":{"on_click_content":"<p><b>Gebäude 08: Green FabLab<\/b><\/p><p>Das Green FabLab ist eine offene High-Tech-Werkstatt... (Weitere Infos hier)<\/p><p><a href='https:\/\/www.hochschule-rhein-waal.de\/de\/fakultaeten\/kommunikation-und-umwelt\/einrichtungen\/green-fablab' target='_blank'>Mehr Infos<\/a><\/p>"},"createTooltipArgs":"<p><b>Green FabLab<\/b><br>Infos anzeigen<\/p>"},
+                        {"pitch":-5.57,"yaw":-49.05,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Eingang Green FabLab<\/p>","sceneId":"GFL07","targetYaw":-32.57}
+                    ]},
+                    "campusmitte":{"title":"Campus Mitte","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2024\/01\/Campusmitte_IMG_20231023_103219_00_124-1.jpg","hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[
+                        {"pitch":-0.35,"yaw":86.98,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zum Green FabLab<\/p>","sceneId":"GFL01","targetYaw":-158.50},
+                        {"pitch":-1.55,"yaw":160.93,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>Geb. 04: Verwaltung & Mensa<\/p>","sceneId":"haus4eingang","targetYaw":-53.35},
+                        {"pitch":-3.92,"yaw":-118.91,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>Geb. 01: Hörsaalzentrum \/ Bibliothek<\/p>","sceneId":"haus1eingang","targetYaw":40.27},
+                        {"pitch":-4.72,"yaw":-16.15,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>Geb. 02: Usabilitylabor<\/p>","sceneId":"haus2eingang","targetYaw":107.94},
+                        {"pitch":-1.72,"yaw":94.10,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>Geb. 03: FabLab & AIS Lab<\/p>","sceneId":"haus3eingang","targetYaw":-46.97}
+                    ]},
+                    "haus1eingang":{"title":"Eingang Geb. 01","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2024\/01\/01-Eingang_IMG_20231023_103432_00_127-1.jpg","pitch":0,"yaw":39.06,"hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[
+                        {"pitch":-2.30,"yaw":40.21,"type":"info","cssClass":"infoicon","clickHandlerArgs":{"on_click_content":"<p style=\"font-weight:600\">Gebäude 01: Hörsaalzentrum \/ Bibliothek<\/p><p>Im Hörsaalzentrum befindet sich unter anderem ein Audimax...<\/p>"},"createTooltipArgs":"<p><b>Gebäude 01 Infos<\/b><br>Anklicken<\/p>"},
+                        {"pitch":-9.36,"yaw":-155.81,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Campus<\/p>","sceneId":"campusmitte","targetYaw":90.49}
+                    ]},
+                    "haus2eingang":{"title":"Eingang Geb. 02","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2024\/01\/01-Eingang-aussen_IMG_20231023_095048_00_083-1.jpg","pitch":0,"yaw":103.52,"hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[
+                        {"pitch":-1.07,"yaw":103.06,"type":"scene","cssClass":"doorinside","createTooltipArgs":"<p>Gebäude 02: Zum Usabilitylabor<\/p>","sceneId":"haus2linksusabilitylab","targetYaw":141.36},
+                        {"pitch":-2.19,"yaw":-116.40,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Campus<\/p>","sceneId":"campusmitte","targetYaw":177.17}
+                    ]},
+                     "haus2linksusabilitylab":{"title":"Usability Labor","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2024\/01\/07_l-2.-OG-Usability-Lab_IMG_20231023_101628_00_105.jpg","pitch":0,"yaw":141.04,"hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[
+                        {"pitch":-8.47,"yaw":-64.73,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Eingang Geb. 02<\/p>","sceneId":"haus2eingang","targetYaw":-97.54},
+                        {"pitch":-9.13,"yaw":140.69,"type":"info","cssClass":"infoicon","clickHandlerArgs":{"on_click_content":"<p style=\"font-weight:600\">Usabilitylabor<\/p><p>Das Usabilitylabor besteht aus einem Labor- und Regieraum...<\/p>"},"createTooltipArgs":"<p><b>Usabilitylabor Infos<\/b><br>Anklicken<\/p>"}
+                    ]},
+                    "haus3eingang":{"title":"Eingang Geb. 03","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2024\/01\/01-Eingang_IMG_20231023_104134_00_130.jpg","pitch":0,"yaw":-43.48,"hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[
+                        {"pitch":10.75,"yaw":-40.51,"type":"scene","cssClass":"doorinside","createTooltipArgs":"<p>Geb. 03: Zum AIS Lab<\/p>","sceneId":"AISLabor1","targetYaw":-21.28},
+                        {"pitch":4.09,"yaw":-40.92,"type":"scene","cssClass":"doorinside","createTooltipArgs":"<p>Geb. 03: Zum FabLab<\/p>","sceneId":"FabLabEingang","targetYaw":-95.78},
+                        {"pitch":1.16,"yaw":48.61,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Campus<\/p>","sceneId":"campusmitte","targetYaw":-105.13},
+                        {"pitch":0.85,"yaw":-139.06,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>Richtung Green FabLab<\/p>","sceneId":"GFL01","targetYaw":-162.87}
+                    ]},
+                    "AISLabor1":{"title":"AIS Labor","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2024\/01\/06_o-AIS-Labor_IMG_20231023_100343_00_096.jpg","pitch":0,"yaw":-28.21,"hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[
+                         {"pitch":-1.74,"yaw":-28.76,"type":"info","cssClass":"infoicon","clickHandlerArgs":{"on_click_content":"<p style=\"font-weight:600\">Gebäude 03: AIS Lab <\/p><p>Das AIS Lab verf\u00fcgt \u00fcber Einrichtungen, die eine moderne Smarthome-Umgebung simulieren...<\/p>"},"createTooltipArgs":"<p><b>AIS Lab Infos<\/b><br>Anklicken<\/p>"},
+                         {"pitch":-2.97,"yaw":91.08,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Eingang Geb. 03<\/p>","sceneId":"haus3eingang","targetYaw":134.57}
+                    ]},
+                    "FabLabEingang":{"title":"FabLab Eingang","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2024\/01\/03_u-FabLab_GS__0079-1.jpg","pitch":0,"yaw":-137.10,"hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[
+                        {"pitch":-7.33,"yaw":-136.29,"type":"info","cssClass":"infoicon","clickHandlerArgs":{"on_click_content":"<p style=\"font-weight:600\">FabLab <\/p><p>3D-Drucker, 3D-Scanner, Laser Cutter & Co...<\/p>"},"createTooltipArgs":"<p><b>FabLab Infos<\/b><br>Anklicken<\/p>"},
+                        {"pitch":-10.47,"yaw":56.21,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Eingang Geb. 03<\/p>","sceneId":"haus3eingang","targetYaw":139.65}
+                    ]},
+                    "haus4eingang":{"title":"Eingang Geb. 04","type":"equirectangular","panorama":"https:\/\/transform-hsrw.org\/wp-content\/uploads\/2024\/01\/01-Eingang_IMG_20231023_103526_00_128.jpg","pitch":0,"yaw":-53.89,"hfov":120,"maxHfov":120,"minHfov":50,"hotSpots":[
+                        {"pitch":0.50,"yaw":-54.15,"type":"info","cssClass":"infoicon","clickHandlerArgs":{"on_click_content":"<p style=\"font-weight:600\">Gebäude 04: Verwaltung \/ Mensa<\/p><p>Die Mensa wurde zum Start des Sommersemesters 2014 er\u00f6ffnet...<\/p>"},"createTooltipArgs":"<p><b>Gebäude 04 Infos<\/b><br>Anklicken<\/p>"},
+                        {"pitch":-2.31,"yaw":110.23,"type":"scene","cssClass":"placechange","createTooltipArgs":"<p>zurück zum Campus<\/p>","sceneId":"campusmitte","targetYaw":11.64}
+                    ]}
+                    // Hier können bei Bedarf weitere Szenen aus dem Original-JSON eingefügt werden
+                }
+            }];
+
+            var scenes = response[1];
+            if(scenes) {
+                var scenedata = scenes.scenes;
+                for(var i_scene in scenedata) {
+                    if (scenedata.hasOwnProperty(i_scene)) {
+                        var scenehotspot = scenedata[i_scene].hotSpots;
+                        if (scenehotspot) { // Prüfen ob hotSpots existiert
+                            for(var j = 0; j < scenehotspot.length; j++) {
+                                if(scenehotspot[j].type === "info") {
+                                    scenehotspot[j]["clickHandlerFunc"] = wpvrhotspot;
+                                } else if(scenehotspot[j].type === "scene") {
+                                    scenehotspot[j]["clickHandlerArgs"] = scenehotspot[j]["text"]; // text ist oft die ID des Hotspots
+                                    // Die Szene wird durch sceneId direkt in Pannellum gewechselt
+                                }
+                                if(scenehotspot[j]["createTooltipArgs"] != "" && typeof scenehotspot[j]["createTooltipArgs"] !== 'undefined') {
+                                    scenehotspot[j]["createTooltipFunc"] = wpvrtooltip;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            var panoshow566 = pannellum.viewer(response[0]["panoid"], scenes);
+            var active_scene = scenes.default.firstScene || Object.keys(scenes.scenes)[0]; // Startszene
+
+            // Globale Referenz für Debugging oder spätere Interaktion
+            window.panoshow566 = panoshow566;
+
+
+            function wpvrhotspot(hotSpotDiv, args) {
+                const content = args.on_click_content;
+                const infoBox = $('.custom-ifram-wrapper'); // Angepasst für einzelne Infobox
+                const infoContent = infoBox.find('.custom-ifram');
+
+                if (content) {
+                    infoContent.html(content);
+                    infoBox.show();
+                }
+            }
+
+            function wpvrtooltip(hotSpotDiv, args) {
+                hotSpotDiv.innerHTML = args; // args ist der HTML-String für den Tooltip
+            }
+
+            // Floor Map Pointer und Aktualisierung
+            function updateFloorMapPointers() {
+                const floorMap = $('#wpvr-floor-map566');
+                floorMap.find('.floor-plan-pointer').remove(); // Alte Pointer entfernen
+
+                const sceneData = scenes.scenes[active_scene];
+                if (sceneData && sceneData.floorplan_data) { // Annahme: Floorplan-Daten sind in der Szene gespeichert
+                    const pointer = $('<div class="floor-plan-pointer add-pulse"></div>');
+                    pointer.css({
+                        top: sceneData.floorplan_data.top + '%',
+                        left: sceneData.floorplan_data.left + '%',
+                        background: sceneData.floorplan_data.color || 'red' // Standardfarbe
+                    });
+                    pointer.attr('scene_id', active_scene);
+                    floorMap.append(pointer);
+                    updatePointerRotation();
+                } else { // Fallback: Füge alle Pointer hinzu, falls keine spezifischen Daten pro Szene
+                    for (const sceneId in scenes.scenes) {
+                        if (scenes.scenes[sceneId].hotSpots) { // Überprüfe, ob hotSpots existiert
+                            const sceneInfoForFloorPlan = scenes_map_data[sceneId]; // Benötigt scenes_map_data
+                            if (sceneInfoForFloorPlan) {
+                                const pointer = $('<div class="floor-plan-pointer"></div>');
+                                pointer.css({
+                                    top: sceneInfoForFloorPlan.top,
+                                    left: sceneInfoForFloorPlan.left,
+                                    background: sceneInfoForFloorPlan.color || 'blue'
+                                });
+                                pointer.attr('scene_id', sceneId);
+                                if (sceneId === active_scene) {
+                                    pointer.addClass('add-pulse');
+                                }
+                                pointer.on('click', function() {
+                                    panoshow566.loadScene($(this).attr('scene_id'));
+                                });
+                                floorMap.append(pointer);
+                            }
+                        }
+                    }
+                     if (scenes.scenes[active_scene]) { // Sicherstellen, dass die aktive Szene existiert
+                        $(`.floor-plan-pointer[scene_id="${active_scene}"]`).addClass('add-pulse');
+                         updatePointerRotation();
+                    }
+                }
+            }
+            
+            // Beispielhafte Szenen-Daten für die Floor Map (muss für jede Szene angepasst werden)
+            // Diese Daten müssen aus dem Original-Skript extrahiert oder neu erstellt werden.
+            var scenes_map_data = {
+                "campusmitte": {"top": "46.875%", "left": "40.2654%", "color": "red"},
+                "GFL01": {"top": "40%", "left": "60%", "color": "blue"}, // Beispielwerte
+                "GFL08": {"top":"81.5625%","left":"83.9363%","color":"#042ff4"},
+                "haus4eingang":{"top":"42.8125%","left":"28.8468%","color":"#042ff4"},
+                "haus1eingang":{"top":"35.625%","left":"43.6709%","color":"#042ff4"},
+                "haus2linksusabilitylab":{"top":"44.375%","left":"52.0846%","color":"#042ff4"},
+                "AISLabor1":{"top":"65.625%","left":"46.4755%","color":"#042ff4"},
+                "FabLabEingang":{"top":"56.5625%","left":"44.6725%","color":"#042ff4"}
+                // ... weitere Szenen mit ihren top/left Prozentwerten und Farben
+            };
+
+
+            panoshow566.on("scenechange", function (sceneId){
+                active_scene = sceneId;
+                $('.floor-plan-pointer').removeClass('add-pulse');
+                $(`.floor-plan-pointer[scene_id="${sceneId}"]`).addClass('add-pulse');
+                updatePointerRotation(); // Rotation auch bei Szenenwechsel aktualisieren
+            });
+
+            panoshow566.on("load", function (){
+                active_scene = panoshow566.getScene(); // Sicherstellen, dass active_scene aktuell ist
+                updateFloorMapPointers(); // Floor Map Pointer beim ersten Laden erstellen
+                setTimeout(() => { window.dispatchEvent(new Event("resize")); }, 200);
+            });
+
+            function updatePointerRotation() {
+                let yaw = panoshow566.getYaw();
+                jQuery(".floor-plan-pointer.add-pulse").css({"transform":"translate(-50%, -50%) rotate("+yaw+"deg)"});
+            }
+             panoshow566.on("mousedown", function() {
+                $(document).on("mousemove.panodrag", function() { // Namespace für Event-Handler
+                    updatePointerRotation();
+                });
+            });
+            panoshow566.on("mouseup", function() {
+                $(document).off("mousemove.panodrag");
+            });
+             panoshow566.on("touchstart", function() { // Für Touch-Geräte
+                $(document).on("touchmove.panodrag", function() {
+                    updatePointerRotation();
+                });
+            });
+            panoshow566.on("touchend", function() {
+                $(document).off("touchmove.panodrag");
+            });
+
+
+            // Floor Map Button zum Ein-/Ausblenden der Karte
+            jQuery('#floor_map_button_566').on('click', function() {
+                jQuery('#wpvr-floor-map566').toggle();
+            });
+
+            // Schließen der Info-Boxen
+            jQuery('.custom-ifram-wrapper .cross, .wpvr-hotspot-tweak-contents-wrapper .cross').on('click', function() {
+                jQuery(this).parent().hide();
+            });
+
+        });
+    })(jQuery);
+    </script>
+</body>
+</html>

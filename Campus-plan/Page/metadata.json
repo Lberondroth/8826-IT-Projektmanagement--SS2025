@@ -1,0 +1,6 @@
+{
+  "name": "HSRW Welcome Screen",
+  "description": "A simple welcome screen application for HSRW, displaying the logo and a continue button.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
