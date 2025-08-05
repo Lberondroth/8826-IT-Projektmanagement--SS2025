@@ -1,0 +1,6 @@
+{
+  "name": "HSRW App",
+  "description": "An interactive HSRW student app with welcome, login, and a home screen featuring quick access to university services like Mensa, Timetable, Courses, News, Notifications, and Campus Plan.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
