@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Navigator Prototyp</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"
+    />
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        background-color: #e0e0e0;
+      }
+      .container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+      }
+      #leftPanel {
+        width: 350px; /* Feste Breite für die linke Spalte */
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+        box-sizing: border-box;
+        background-color: #f4f4f4;
+        border-right: 1px solid #cccccc;
+        overflow-y: auto;
+      }
+      #leftPanel h2 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+        color: #333;
+        text-align: center;
+      }
+      #topDownMapContainer {
+        position: relative;
+        width: 100%;
+        padding-top: 75%; /* Seitenverhältnis der Karte (Höhe = 75% der Breite) */
+        border: 1px solid #ccc;
+        background-image: url("https://transform-hsrw.org/wp-content/uploads/2024/01/karte-campus-kamp-linfort-2.5-de.png"); /* Dein gewünschtes Kartenbild */
+        background-size: contain; /* Stellt sicher, dass das ganze Bild sichtbar ist */
+        background-position: center;
+        background-repeat: no-repeat;
+        margin-bottom: 20px;
+        border-radius: 5px;
+      }
+      .map-pointer {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background-color: rgba(0, 0, 255, 0.8); /* Blau für normale Pointer */
+        border-radius: 50%;
+        border: 2px solid white;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+        transition: transform 0.2s ease-out;
+      }
+      .map-pointer:hover {
+        transform: translate(-50%, -50%) scale(1.3);
+      }
+      .map-pointer.current {
+        background-color: rgba(255, 0, 0, 0.9); /* Rot für aktuellen Pointer */
+        width: 16px;
+        height: 16px;
+        z-index: 10;
+      }
+      .map-pointer-label {
+        display: none;
+        position: absolute;
+        bottom: 120%; /* Positioniert das Label über dem Pointer */
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        white-space: nowrap;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        z-index: 20;
+      }
+      .map-pointer:hover .map-pointer-label {
+        display: block;
+      }
+      .map-pointer.current .map-pointer-label {
+        display: block;
+        background-color: rgba(255, 0, 0, 0.9);
+        color: white;
+        font-weight: bold;
+      }
+
+      #eventInfo {
+        margin-top: 10px;
+        padding: 15px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      #eventInfo h3 {
+        margin-top: 0;
+        font-size: 1.2em;
+        color: #333;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+      }
+      #eventInfo p {
+        margin: 5px 0;
+        font-size: 0.9em;
+        color: #555;
+      }
+      #eventInfo p strong {
+        color: #333;
+      }
+
+      #panoramaContainer {
+        flex-grow: 1;
+        height: 100%;
+        background-color: #333; /* Fallback, falls Panorama nicht lädt */
+      }
+      .pnlm-load-box {
+        /* Versteckt die Standard-Ladebox von Pannellum, wenn kein Bild da ist */
+        display: none !important;
+      }
+      .pnlm-error-msg {
+        /* Etwas freundlicher, falls doch ein Fehler auftritt */
+        background-color: rgba(0, 0, 0, 0.7) !important;
+        color: white !important;
+        border-radius: 5px;
+        padding: 10px !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="leftPanel">
+        <h2>Campus-Navigation</h2>
+        <div id="topDownMapContainer"></div>
+        <div id="eventInfo">
+          <h3>Aktueller Termin:</h3>
+          <p>
+            <strong>Veranstaltung:</strong>
+            <span id="eventVeranstaltung"></span>
+          </p>
+          <p>
+            <strong>Raum:</strong> <span id="eventRaum"></span> (<span
+              id="eventUrsprungsraum"
+            ></span
+            >)
+          </p>
+          <p><strong>Zeit:</strong> <span id="eventZeit"></span></p>
+        </div>
+      </div>
+      <div id="panoramaContainer">
+        <!-- Hier wird Pannellum initialisiert -->
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <script>
+      // Simulierte Backend-Daten (basierend auf dem Python-Output)
+      const backendData = {
+        viewer_config: {
+          default: {
+            firstScene: "haus1eingang", // Beispiel: Hörsaalzentrum als Start
+            sceneFadeDuration: 1000,
+            hfov: 100,
+            yaw: 39,
+            pitch: 0,
+            autoLoad: true,
+          },
+          scenes: {
+            campusmitte: {
+              title: "Campus Mitte",
+              hfov: 100,
+              pitch: 0,
+              yaw: -94,
+              type: "equirectangular",
+              panorama: "bilder/Campusmitte_IMG_20231023_103219_00_124-1.jpg",
+              hotSpots: [],
+            },
+            haus1eingang: {
+              title: "Gebäude 01 - Hörsaalzentrum",
+              hfov: 100,
+              pitch: 0,
+              yaw: 39,
+              type: "equirectangular",
+              panorama: "bilder/01-Eingang_IMG_20231023_103432_00_127-1.jpg",
+              hotSpots: [],
+            },
+            haus2eingang: {
+              title: "Gebäude 02 - Bibliothek / Usabilitylabor",
+              hfov: 100,
+              pitch: 0,
+              yaw: 103,
+              type: "equirectangular",
+              panorama:
+                "bilder/01-Eingang-aussen_IMG_20231023_095048_00_083-1.jpg",
+              hotSpots: [],
+            },
+            haus2linksusabilitylab: {
+              title: "Gebäude 02 - Usabilitylabor Innenansicht",
+              hfov: 100,
+              pitch: -9,
+              yaw: 141,
+              type: "equirectangular",
+              panorama:
+                "bilder/07_l-2.-OG-Usability-Lab_IMG_20231023_101628_00_105.jpg",
+              hotSpots: [],
+            },
+            haus3eingang: {
+              title: "Gebäude 03 - FabLab / AIS Lab",
+              hfov: 100,
+              pitch: 0,
+              yaw: -43,
+              type: "equirectangular",
+              panorama: "bilder/01-Eingang_IMG_20231023_104134_00_130.jpg",
+              hotSpots: [],
+            },
+            FabLabEingang: {
+              title: "FabLab Eingangsbereich",
+              hfov: 100,
+              pitch: -7,
+              yaw: -137,
+              type: "equirectangular",
+              panorama: "bilder/03_u-FabLab_GS__0079-1.jpg",
+              hotSpots: [],
+            },
+            AISLabor1: {
+              title: "AIS Labor",
+              hfov: 100,
+              pitch: -1,
+              yaw: -28,
+              type: "equirectangular",
+              panorama: "bilder/06_o-AIS-Labor_IMG_20231023_100343_00_096.jpg",
+              hotSpots: [],
+            },
+            haus4eingang: {
+              title: "Gebäude 04 - Verwaltung / Mensa",
+              hfov: 100,
+              pitch: 0,
+              yaw: -53,
+              type: "equirectangular",
+              panorama: "bilder/01-Eingang_IMG_20231023_103526_00_128.jpg",
+              hotSpots: [],
+            },
+            GFL07: {
+              title: "Gebäude 08 - Green FabLab Aussen",
+              hfov: 100,
+              pitch: -10,
+              yaw: -134,
+              type: "equirectangular",
+              panorama:
+                "bilder/07-Eingang-Green-FabLab_IMG_20231023_105842_00_148.jpg",
+              hotSpots: [],
+            },
+            GFL08: {
+              title: "Gebäude 08 - Green FabLab Innen",
+              hfov: 100,
+              pitch: 0,
+              yaw: 11,
+              type: "equirectangular",
+              panorama: "bilder/08-Green-FabLab_GS__0084.jpg",
+              hotSpots: [],
+            },
+            // Weitere Szenen hier hinzufügen, falls vorhanden
+          },
+          showControls: true,
+          orientationOnByDefault: false,
+          draggable: true,
+          mouseZoom: true,
+          compass: true,
+        },
+        map_data: {
+          map_image_url:
+            "https://transform-hsrw.org/wp-content/uploads/2024/01/karte-campus-kamp-linfort-2.5-de.png", // Wird per CSS gesetzt
+          pointers: [
+            {
+              id: "campusmitte_map_pointer",
+              x: "40.26",
+              y: "46.87",
+              label: "Campus Mitte",
+              sceneId: "campusmitte",
+              isCurrent: false,
+            },
+            // "haus1eingang" ist der aktuelle Pointer, daher nicht hier
+            {
+              id: "haus2eingang_map_pointer",
+              x: "52.08",
+              y: "44.37",
+              label: "Gebäude 02 - Bibliothek / Usabilitylabor",
+              sceneId: "haus2eingang",
+              isCurrent: false,
+            },
+            {
+              id: "haus2linksusabilitylab_map_pointer",
+              x: "51.88",
+              y: "44.37",
+              label: "Gebäude 02 - Usabilitylabor Innenansicht",
+              sceneId: "haus2linksusabilitylab",
+              isCurrent: false,
+            },
+            {
+              id: "haus3eingang_map_pointer",
+              x: "45.0",
+              y: "60.0",
+              label: "Gebäude 03 - FabLab / AIS Lab",
+              sceneId: "haus3eingang",
+              isCurrent: false,
+            },
+            {
+              id: "FabLabEingang_map_pointer",
+              x: "44.67",
+              y: "56.56",
+              label: "FabLab Eingangsbereich",
+              sceneId: "FabLabEingang",
+              isCurrent: false,
+            },
+            {
+              id: "AISLabor1_map_pointer",
+              x: "46.27",
+              y: "65.62",
+              label: "AIS Labor",
+              sceneId: "AISLabor1",
+              isCurrent: false,
+            },
+            {
+              id: "haus4eingang_map_pointer",
+              x: "28.84",
+              y: "42.81",
+              label: "Gebäude 04 - Verwaltung / Mensa",
+              sceneId: "haus4eingang",
+              isCurrent: false,
+            },
+            {
+              id: "GFL07_map_pointer",
+              x: "83.0",
+              y: "80.0",
+              label: "Gebäude 08 - Green FabLab Aussen",
+              sceneId: "GFL07",
+              isCurrent: false,
+            },
+            {
+              id: "GFL08_map_pointer",
+              x: "83.93",
+              y: "81.56",
+              label: "Gebäude 08 - Green FabLab Innen",
+              sceneId: "GFL08",
+              isCurrent: false,
+            },
+          ],
+          current_event_pointer: {
+            id: "current_event_pointer",
+            x: "43.67",
+            y: "35.62",
+            label: "Lineare Algebra - Gebäude 01",
+            sceneId: "haus1eingang",
+            isCurrent: true,
+          },
+        },
+        event_details: {
+          veranstaltung: "Lineare Algebra",
+          raum_name: "Gebäude 01 - Hörsaalzentrum",
+          ursprungsraum: "0102130",
+          start_zeit: "10:00",
+          end_zeit: "11:30",
+        },
+        page_title: "Campus Navigator: Lineare Algebra - Gebäude 01",
+      };
+
+      document.title = backendData.page_title; // Seitentitel setzen
+
+      const pannellumViewer = pannellum.viewer(
+        "panoramaContainer",
+        backendData.viewer_config
+      );
+
+      const mapContainer = document.getElementById("topDownMapContainer");
+
+      function createPointer(pointerData, isCurrentEvent = false) {
+        if (!pointerData || pointerData.x === null || pointerData.y === null)
+          return;
+
+        const pointer = document.createElement("div");
+        pointer.classList.add("map-pointer");
+        if (isCurrentEvent || pointerData.isCurrent) {
+          // Unterscheidung für den aktuellen Termin-Pointer
+          pointer.classList.add("current");
+        }
+        pointer.style.left = pointerData.x + "%";
+        pointer.style.top = pointerData.y + "%";
+        pointer.dataset.sceneId = pointerData.sceneId;
+
+        const label = document.createElement("span");
+        label.classList.add("map-pointer-label");
+        label.textContent = pointerData.label;
+        pointer.appendChild(label);
+
+        pointer.addEventListener("click", () => {
+          if (
+            pointerData.sceneId &&
+            backendData.viewer_config.scenes[pointerData.sceneId]
+          ) {
+            pannellumViewer.loadScene(pointerData.sceneId);
+            // Optional: Update event details if clicking changes the "current" event context
+            // For now, this only changes the panorama view
+          } else {
+            console.warn(
+              "Szene nicht gefunden für Pointer:",
+              pointerData.sceneId
+            );
+          }
+        });
+        mapContainer.appendChild(pointer);
+      }
+
+      // Alle "normalen" Pointer erstellen
+      backendData.map_data.pointers.forEach((pData) => createPointer(pData));
+
+      // Den speziellen "current_event_pointer" erstellen (oder hervorheben, falls schon durch die Liste oben erstellt)
+      if (backendData.map_data.current_event_pointer) {
+        // Prüfen ob der current_event_pointer schon durch die allgemeine Liste erstellt wurde
+        let existingCurrent = Array.from(mapContainer.children).find(
+          (child) =>
+            child.dataset.sceneId ===
+              backendData.map_data.current_event_pointer.sceneId &&
+            parseFloat(child.style.left).toFixed(2) ===
+              parseFloat(backendData.map_data.current_event_pointer.x).toFixed(
+                2
+              ) &&
+            parseFloat(child.style.top).toFixed(2) ===
+              parseFloat(backendData.map_data.current_event_pointer.y).toFixed(
+                2
+              )
+        );
+
+        if (existingCurrent) {
+          existingCurrent.classList.add("current");
+          let label = existingCurrent.querySelector(".map-pointer-label");
+          if (label)
+            label.textContent =
+              backendData.map_data.current_event_pointer.label; // Update label
+        } else {
+          createPointer(backendData.map_data.current_event_pointer, true);
+        }
+      }
+
+      // Event-Informationen füllen
+      const event = backendData.event_details;
+      document.getElementById("eventVeranstaltung").textContent =
+        event.veranstaltung || "N/A";
+      document.getElementById("eventRaum").textContent =
+        event.raum_name || "N/A";
+      document.getElementById("eventUrsprungsraum").textContent =
+        event.ursprungsraum || "N/A";
+      document.getElementById("eventZeit").textContent =
+        event.start_zeit && event.end_zeit
+          ? `${event.start_zeit} - ${event.end_zeit}`
+          : "N/A";
+
+      // Sicherstellen, dass das Panorama geladen wird, auch wenn es nicht das erste in der Liste ist
+      if (backendData.viewer_config.default.firstScene) {
+        pannellumViewer.loadScene(backendData.viewer_config.default.firstScene);
+      }
+    </script>
+  </body>
+</html>

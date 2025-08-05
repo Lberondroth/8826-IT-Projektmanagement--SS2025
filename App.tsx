@@ -4,10 +4,21 @@ import { Button } from "./src/components/ui/Button";
 import { LoginScreen } from "./src/components/screens/LoginScreen";
 import HomeScreen from "./src/components/screens/HomeScreen";
 import MensaScreen from "./src/components/screens/MensaScreen";
+import CampusMapScreen from "./src/components/screens/CampusMapScreen";
+import CalendarScreen from "./src/components/screens/CalendarScreen";
+import NewsScreen from "./src/components/screens/NewsScreen";
+import KurseScreen from "./src/components/screens/KurseScreen";
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<
-    "welcome" | "login" | "home" | "mensa"
+    | "welcome"
+    | "login"
+    | "home"
+    | "mensa"
+    | "campus-map"
+    | "calendar"
+    | "news"
+    | "kurse"
   >("welcome");
 
   const handleContinueToLogin = () => {
@@ -24,8 +35,24 @@ const App: React.FC = () => {
     setCurrentView("mensa");
   };
 
+  const handleNavigateToCampusMap = () => {
+    setCurrentView("campus-map");
+  };
+
   const handleNavigateToHome = () => {
     setCurrentView("home");
+  };
+
+  const handleNavigateToCalendar = () => {
+    setCurrentView("calendar");
+  };
+
+  const handleNavigateToNews = () => {
+    setCurrentView("news");
+  };
+
+  const handleNavigateToKurse = () => {
+    setCurrentView("kurse");
   };
 
   if (currentView === "login") {
@@ -33,11 +60,66 @@ const App: React.FC = () => {
   }
 
   if (currentView === "home") {
-    return <HomeScreen onNavigateToMensa={handleNavigateToMensa} />;
+    return (
+      <HomeScreen
+        onNavigateToMensa={handleNavigateToMensa}
+        onNavigateToCampusMap={handleNavigateToCampusMap}
+        onNavigateToCalendar={handleNavigateToCalendar}
+        onNavigateToNews={handleNavigateToNews}
+        onNavigateToKurse={handleNavigateToKurse}
+        onNavigateToHome={handleNavigateToHome}
+      />
+    );
   }
 
   if (currentView === "mensa") {
-    return <MensaScreen onNavigateToHome={handleNavigateToHome} />;
+    return (
+      <MensaScreen
+        onNavigateToHome={handleNavigateToHome}
+        onNavigateToMensa={handleNavigateToMensa}
+        onNavigateToCalendar={handleNavigateToCalendar}
+      />
+    );
+  }
+
+  if (currentView === "campus-map") {
+    return (
+      <CampusMapScreen
+        onNavigateToHome={handleNavigateToHome}
+        onNavigateToMensa={handleNavigateToMensa}
+        onNavigateToCalendar={handleNavigateToCalendar}
+      />
+    );
+  }
+
+  if (currentView === "calendar") {
+    return (
+      <CalendarScreen
+        onNavigateToHome={handleNavigateToHome}
+        onNavigateToMensa={handleNavigateToMensa}
+        onNavigateToCalendar={handleNavigateToCalendar}
+      />
+    );
+  }
+
+  if (currentView === "news") {
+    return (
+      <NewsScreen
+        onNavigateToHome={handleNavigateToHome}
+        onNavigateToMensa={handleNavigateToMensa}
+        onNavigateToCalendar={handleNavigateToCalendar}
+      />
+    );
+  }
+
+  if (currentView === "kurse") {
+    return (
+      <KurseScreen
+        onNavigateToHome={handleNavigateToHome}
+        onNavigateToMensa={handleNavigateToMensa}
+        onNavigateToCalendar={handleNavigateToCalendar}
+      />
+    );
   }
 
   // Welcome Screen View (default)

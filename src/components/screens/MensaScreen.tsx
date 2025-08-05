@@ -1,31 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { HouseIcon } from "../icons/HouseIcon";
-import { UserIcon } from "../icons/UserIcon";
 import { LogoImage } from "../ui/LogoImage";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { ErrorMessage } from "../ui/ErrorMessage";
+import BottomNavigation from "../ui/BottomNavigation";
 import { ApiService } from "../../services/ApiService";
 import type { MenuItem, MensaScreenProps } from "../../types";
-
-// Import logo images
 import mensaLogo from "../../assets/mensa_logo.png";
-import stundenplanLogo from "../../assets/stundenplan_logo.png";
 
-// Icon components
-const StundenplanIcon: React.FC<{ className?: string }> = ({ className }) => (
-  <LogoImage
-    src={stundenplanLogo}
-    alt="Stundenplan"
-    size="md"
-    className={className}
-  />
-);
-
-const MensaIcon: React.FC<{ className?: string }> = ({ className }) => (
-  <LogoImage src={mensaLogo} alt="Mensa" size="md" className={className} />
-);
-
-const MensaScreen: React.FC<MensaScreenProps> = ({ onNavigateToHome }) => {
+const MensaScreen: React.FC<MensaScreenProps> = ({
+  onNavigateToHome,
+  onNavigateToMensa,
+  onNavigateToCalendar,
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -48,15 +34,14 @@ const MensaScreen: React.FC<MensaScreenProps> = ({ onNavigateToHome }) => {
         setIsLoading(false);
       }
     };
-
     loadMensaData();
   }, []);
 
   const handleRetry = () => {
-    setError(null);
     const loadMensaData = async () => {
       try {
         setIsLoading(true);
+        setError(null);
         const data = await ApiService.getMensaData();
         setMenuItems(data);
       } catch (err) {
@@ -71,36 +56,6 @@ const MensaScreen: React.FC<MensaScreenProps> = ({ onNavigateToHome }) => {
     };
     loadMensaData();
   };
-  const navItems = [
-    {
-      id: "home",
-      label: "Home",
-      Icon: HouseIcon,
-      active: false,
-      action: onNavigateToHome,
-    },
-    {
-      id: "calendar",
-      label: "Stundenplan",
-      Icon: StundenplanIcon,
-      active: false,
-      action: () => console.log("Nav Calendar clicked"),
-    },
-    {
-      id: "mensa-nav",
-      label: "Mensa",
-      Icon: MensaIcon,
-      active: true,
-      action: () => console.log("Already on Mensa screen"),
-    },
-    {
-      id: "profile",
-      label: "Profil",
-      Icon: UserIcon,
-      active: false,
-      action: () => console.log("Nav Profile clicked"),
-    },
-  ];
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 font-sans antialiased">
@@ -115,7 +70,6 @@ const MensaScreen: React.FC<MensaScreenProps> = ({ onNavigateToHome }) => {
           Mensa
         </h1>
       </header>
-
       {/* Main Content */}
       <main className="flex-grow p-4 sm:p-6 max-w-4xl mx-auto w-full">
         {isLoading ? (
@@ -203,32 +157,15 @@ const MensaScreen: React.FC<MensaScreenProps> = ({ onNavigateToHome }) => {
             )}
           </div>
         )}
-      </main>
-
+      </main>{" "}
       {/* Spacer for bottom navigation */}
-      <div className="h-20 sm:h-24"></div>
-
-      {/* Bottom Navigation */}
-      <nav className="bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] flex justify-around items-center p-3 sm:p-4 fixed bottom-0 left-0 right-0 w-full z-20">
-        {navItems.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={item.action}
-            aria-label={item.label}
-            className={`p-3 sm:p-4 rounded-xl flex flex-col items-center justify-center min-w-[60px] min-h-[60px] focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 hover:scale-110 active:scale-95 ${
-              item.active
-                ? "text-blue-600 bg-blue-50 shadow-md"
-                : "text-slate-500 hover:text-blue-500 hover:bg-blue-50"
-            }`}
-          >
-            <item.Icon className="w-6 h-6 sm:w-7 sm:h-7" />
-            <span className="text-xs mt-1 font-medium hidden sm:block">
-              {item.label}
-            </span>
-          </button>
-        ))}
-      </nav>
+      <div className="h-20 sm:h-24"></div> {/* Bottom Navigation */}
+      <BottomNavigation
+        currentPage="mensa"
+        onNavigateToHome={onNavigateToHome}
+        onNavigateToMensa={onNavigateToMensa}
+        onNavigateToCalendar={onNavigateToCalendar}
+      />
     </div>
   );
 };

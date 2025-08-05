@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently --names \"FRONTEND,BACKEND\" --prefix-colors \"cyan,green\" \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "vite",
-    "dev:backend": "cd backend && python app.py",
+    "dev:backend": "cd backend && \"C:/Users/louis/Desktop/8826 IT-Projektmanagement, SS2025/.venv/Scripts/python.exe\" app.py",
     "dev:frontend-only": "vite",
     "build": "vite build",
     "preview": "vite preview"

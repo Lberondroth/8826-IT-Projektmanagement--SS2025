@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Logo } from "../ui/Logo";
 import { HouseIcon } from "../icons/HouseIcon";
 import { UserIcon } from "../icons/UserIcon";
+import BottomNavigation from "../ui/BottomNavigation";
+import HattyChatbot from "../ui/HattyChatbot";
 import type { HomeScreenProps } from "../../types";
 
 // Import actual logo images
@@ -76,8 +78,16 @@ const NavMensaIcon: React.FC<{ className?: string }> = ({ className }) => (
   />
 );
 
-const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToMensa }) => {
+const HomeScreen: React.FC<HomeScreenProps> = ({
+  onNavigateToMensa,
+  onNavigateToCampusMap,
+  onNavigateToCalendar,
+  onNavigateToNews,
+  onNavigateToKurse,
+  onNavigateToHome,
+}) => {
   const userName = "user"; // This could be dynamic in a real app
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
   const gridItems = [
     {
@@ -90,19 +100,19 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToMensa }) => {
       id: "stundenplan",
       label: "Stundenplan",
       Icon: StundenplanIcon,
-      action: () => console.log("Stundenplan clicked"),
+      action: onNavigateToCalendar,
     },
     {
       id: "kurse",
       label: "Kurse",
       Icon: KurseIcon,
-      action: () => console.log("Kurse clicked"),
+      action: onNavigateToKurse,
     },
     {
       id: "news",
       label: "News",
       Icon: NewsIcon,
-      action: () => console.log("News clicked"),
+      action: onNavigateToNews,
     },
     {
       id: "benachrichtigungen",
@@ -114,7 +124,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToMensa }) => {
       id: "campusplan",
       label: "Campus-Plan",
       Icon: CampusPlanIcon,
-      action: () => console.log("Campus-Plan clicked"),
+      action: onNavigateToCampusMap,
     },
   ];
 
@@ -131,7 +141,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToMensa }) => {
       label: "Stundenplan",
       Icon: NavStundenplanIcon,
       active: false,
-      action: () => console.log("Nav Calendar clicked"),
+      action: onNavigateToCalendar,
     },
     {
       id: "mensa-nav",
@@ -204,6 +214,23 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToMensa }) => {
           </button>
         ))}
       </nav>
+
+      {/* Bottom Navigation */}
+      <BottomNavigation
+        currentPage="home"
+        onNavigateToHome={onNavigateToHome}
+        onNavigateToMensa={onNavigateToMensa}
+        onNavigateToCalendar={onNavigateToCalendar}
+      />
+
+      {/* Spacer for bottom navigation */}
+      <div className="h-20 sm:h-24 md:h-28"></div>
+
+      {/* Hatty Chatbot */}
+      <HattyChatbot
+        isOpen={isChatbotOpen}
+        onToggle={() => setIsChatbotOpen(!isChatbotOpen)}
+      />
     </div>
   );
 };

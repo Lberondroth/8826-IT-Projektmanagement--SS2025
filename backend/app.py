@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
 from bs4 import BeautifulSoup
@@ -6,6 +6,8 @@ import re
 from datetime import datetime
 import logging
 import sys
+import os
+from pathlib import Path
 from typing import Dict, List, Any, Optional
 
 # Color codes for terminal output
@@ -217,10 +219,157 @@ def health_check():
     """Health check endpoint"""
     return jsonify({"status": "healthy", "service": "mensa-scraper"})
 
+# Hatty integration - Google Generative AI implementation
+HATTY_AVAILABLE = False
+try:
+    from hatty_gemini import get_hatty_instance, cleanup_hatty
+    HATTY_AVAILABLE = True
+    logger.info("Hatty Gemini components imported successfully")
+except ImportError as e:
+    logger.warning(f"Hatty Gemini components not available: {e}")
+    HATTY_AVAILABLE = False
+
+# Global Hatty bot instance
+hatty_bot_instance = None
+
+def initialize_hatty_bot():
+    """Initialize Hatty bot if available (Google Generative AI implementation)"""
+    global hatty_bot_instance
+    
+    if not HATTY_AVAILABLE:
+        logger.warning("Hatty Gemini components not available")
+        return False
+    
+    # If we already have an instance, don't create another
+    if hatty_bot_instance is not None:
+        logger.info("Hatty bot instance already exists - skipping initialization")
+        return True
+    
+    try:
+        # Get Hatty instance
+        hatty_bot_instance = get_hatty_instance()
+        
+        if hatty_bot_instance:
+            logger.info("Hatty bot instance created successfully")
+            return True
+        else:
+            logger.warning("Failed to create Hatty bot instance")
+            return False
+        
+    except Exception as e:
+        logger.warning(f"Hatty bot initialization failed: {str(e)}")
+        logger.info("Continuing without chatbot functionality")
+        return False
+
+@app.route('/api/hatty/chat', methods=['POST'])
+def hatty_chat():
+    """Chat with Hatty bot using Google Generative AI"""
+    global hatty_bot_instance
+    
+    if not HATTY_AVAILABLE:
+        return jsonify({
+            "error": "Hatty bot not available",
+            "response": "Entschuldigung, der Chatbot ist momentan nicht verfügbar."
+        }), 503
+    
+    # Initialize or get Hatty instance
+    if hatty_bot_instance is None:
+        logger.info("Initializing Hatty bot...")
+        hatty_bot_instance = get_hatty_instance()
+        
+        if hatty_bot_instance is None:
+            return jsonify({
+                "error": "Hatty bot initialization failed",
+                "response": "Entschuldigung, der Chatbot konnte nicht initialisiert werden."
+            }), 503
+    
+    try:
+        data = request.get_json()
+        if not data or 'message' not in data:
+            return jsonify({"error": "Message is required"}), 400
+        
+        user_message = data['message']
+        logger.info(f"Received chat message: {user_message}")
+        
+        # Send message to Hatty and get response
+        logger.info("Calling hatty_bot_instance.send_message...")
+        response = hatty_bot_instance.send_message(user_message)
+        logger.info(f"Raw response from Hatty: '{response}' (type: {type(response)})")
+        
+        if not response or response.strip() == "":
+            logger.warning("Empty response from Hatty")
+            response = "Hatty: Entschuldigung, ich konnte keine Antwort generieren."
+        
+        logger.info(f"Hatty response: {response}")
+        return jsonify({
+            "response": response,
+            "timestamp": datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in Hatty chat: {str(e)}")
+        return jsonify({
+            "error": "Internal server error",
+            "response": "Entschuldigung, es ist ein Fehler aufgetreten."
+        }), 500
+
+@app.route('/api/hatty/status', methods=['GET'])
+def hatty_status():
+    """Check Hatty bot status"""
+    is_available = HATTY_AVAILABLE and hatty_bot_instance is not None
+    if is_available and hatty_bot_instance:
+        # Check if the bot is actually working
+        try:
+            is_available = hatty_bot_instance.is_available()
+        except Exception as e:
+            logger.warning(f"Error checking Hatty availability: {e}")
+            is_available = False
+    
+    return jsonify({
+        "available": is_available,
+        "status": "ready" if is_available else "unavailable"
+    })
+
 if __name__ == '__main__':
+    import atexit
+    import signal
+    
+    # Set up cleanup handlers
+    def cleanup_handler():
+        """Clean up resources on exit"""
+        global hatty_bot_instance
+        logger.info("Shutting down application...")
+        if hatty_bot_instance:
+            try:
+                cleanup_hatty()
+            except Exception as e:
+                logger.warning(f"Error cleaning up Hatty bot: {e}")
+    
+    # Register cleanup handlers
+    atexit.register(cleanup_handler)
+    signal.signal(signal.SIGTERM, lambda signum, frame: cleanup_handler())
+    if hasattr(signal, 'SIGINT'):
+        signal.signal(signal.SIGINT, lambda signum, frame: cleanup_handler())
+    
     logger.info("Starting Flask application...")
+    
+    # Initialize Hatty bot if available
+    if initialize_hatty_bot():
+        logger.info("Hatty bot initialized and ready")
+    else:
+        logger.warning("Hatty bot not available - continuing without chatbot functionality")
+    
     logger.info("Server will be available at: http://localhost:5000")
     logger.info("API endpoints:")
     logger.info("  - GET /api/mensa - Get mensa menu data")
     logger.info("  - GET /api/health - Health check")
-    app.run(debug=True, host='localhost', port=5000)
+    logger.info("  - POST /api/hatty/chat - Chat with Hatty bot")
+    logger.info("  - GET /api/hatty/status - Check Hatty bot status")
+    
+    try:
+        # Disable reloader to prevent multiple instances
+        app.run(debug=True, host='localhost', port=5000, use_reloader=False)
+    except KeyboardInterrupt:
+        logger.info("Application interrupted by user")
+    finally:
+        cleanup_handler()
