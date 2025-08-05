@@ -35,7 +35,8 @@ Eine moderne, responsive Webanwendung für Studierende der **Hochschule Rhein-Wa
 
 - **Node.js** 18+ und npm
 - **Python** 3.8+ mit pip
-- Moderner Webbrowser (für Hatty Chatbot)
+- Google-API Key in venv (für Hatty Chatbot)
+  → testbar mit cmd echo %GOOGLE_API_KEY%.
 
 ### Automatische Installation & Start
 
