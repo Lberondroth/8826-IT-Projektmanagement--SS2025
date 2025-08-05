@@ -57,7 +57,7 @@ Das war's! Beide Befehle starten automatisch:
 
 - ✅ Frontend (Vite Dev Server)
 - ✅ Backend (Flask API Server)
-- ✅ Hatty Chatbot (Browser-basiert)
+- ✅ Hatty Chatbot (API-basiert)
 
 ### URLs nach dem Start
 
