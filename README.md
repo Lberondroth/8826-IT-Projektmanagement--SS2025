@@ -82,6 +82,7 @@ Das war's! Beide Befehle starten automatisch:
    ```
 
 3. **Backend-Abhängigkeiten installieren**:
+Für Verwendung von Hatty wird ein API-Key von Google AI Studios benötigt, dieser muss im backend .venv Ordner, hinzugefügt werden.
 
    ```bash
    cd backend
@@ -89,7 +90,7 @@ Das war's! Beide Befehle starten automatisch:
    cd ..
    ```
 
-4. **Entwicklungsserver starten**:
+5. **Entwicklungsserver starten**:
    ```bash
    npm run dev
    ```
