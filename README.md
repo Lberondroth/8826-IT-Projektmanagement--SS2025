@@ -329,7 +329,7 @@ npm run preview         # Produktions-Build Vorschau
 - 🔔 **Push-Benachrichtigungen** für Menü-Updates
 - 📊 **Analytics-Dashboard** für Nutzungsverfolgung
 - 🌐 **Mehrsprachige Unterstützung** (Deutsch/Englisch)
-- 🗓️ **Kalender-Integration** für Kurspläne
+- 🗓️ **Kalender-Integration** für Kurspläne (optimieren/automatisieren)
 
 ## 🤝 Mitwirken
 
@@ -352,3 +352,4 @@ Dieses Projekt ist Teil des **IT-Projektmanagement** Kurses an der **Hochschule 
 ---
 
 **Mit ❤️ für HSRW-Studierende gebaut** 🎓
+
