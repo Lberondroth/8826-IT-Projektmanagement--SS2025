@@ -71,7 +71,7 @@ Das war's! Beide Befehle starten automatisch:
 1. **Repository klonen**:
 
    ```bash
-   git clone <your-repo-url>
+   git clone DAS REPO HIER
    cd hsrw-app
    ```
 
