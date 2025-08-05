@@ -1,4 +1,4 @@
-# 🎓 HSRW Universitäts-App
+# 🎓 HSRW Universitäts-App „CampusHub“
 
 Eine moderne, responsive Webanwendung für Studierende der **Hochschule Rhein-Waal (HSRW)** mit Echtzeit-Mensa-Integration und Universitätsdiensten.
 
@@ -15,7 +15,7 @@ Eine moderne, responsive Webanwendung für Studierende der **Hochschule Rhein-Wa
 
 ### 🎨 **Moderne UI/UX**
 
-- **Mobile-First responsive Design** mit Tailwind CSS
+- **Mobile-First Responsive Design** mit Tailwind CSS
 - **Flüssige Animationen** und Hover-Effekte
 - **Touch-freundliche Oberfläche** (44px minimale Touch-Ziele)
 - **HSRW Markenfarben** und professionelles Styling
@@ -27,7 +27,7 @@ Eine moderne, responsive Webanwendung für Studierende der **Hochschule Rhein-Wa
 - **React 19** mit modernen Hooks und Komponentenarchitektur
 - **Flask Backend** mit farbigem Logging-System
 - **Echtzeit Web-Scraping** für Live-Universitätsdaten
-- **Modulare Komponentenstruktur** für Wartbarkeit
+- **Modulare Komponentenstruktur** für Wartbarkeit.
 
 ## 🚀 Schnellstart
 
@@ -111,12 +111,12 @@ Dieser einzelne Befehl startet automatisch:
 
 ### **Hauptfunktionen**
 
-- 🍽️ **Mensa** - Echtzeit-Cafeteria-Menü
-- 📚 **Kurse** - Kursverwaltung
-- 📅 **Stundenplan** - Stundenplan-Übersicht
-- 📰 **News** - Universitätsnachrichten
-- 🔔 **Benachrichtigungen** - Benachrichtigungen
-- 🗺️ **Campus-Plan** - Interaktive Campus-Karte
+- 🍽️ **Mensa** – Echtzeit-Cafeteria-Menü
+- 📚 **Kurse** – Kursverwaltung
+- 📅 **Stundenplan** – Stundenplan-Übersicht
+- 📰 **News** – Universitätsnachrichten
+- 🔔 **Benachrichtigungen** – Benachrichtigungen
+- 🗺️ **Campus-Plan** – Interaktive Campus-Karte
 
 ## 🛠️ Technische Architektur
 
@@ -183,40 +183,40 @@ GET /api/health   # Backend-Gesundheitsprüfung
 
 ### **Bildschirm-Komponenten**
 
-- `HomeScreen.tsx` - Haupt-Dashboard mit Service-Raster
-- `LoginScreen.tsx` - Benutzerauthentifizierungs-Oberfläche
-- `MensaScreen.tsx` - Live-Menü-Anzeige mit Ladezuständen
+- `HomeScreen.tsx` – Haupt-Dashboard mit Service-Raster
+- `LoginScreen.tsx` – Benutzerauthentifizierungs-Oberfläche
+- `MensaScreen.tsx` – Live-Menü-Anzeige mit Ladezuständen
 
 ### **UI-Komponenten**
 
-- `Button.tsx` - Erweiterte Schaltfläche mit Hover-Effekten
-- `LoadingSpinner.tsx` - Animierter Ladeindikator
-- `ErrorMessage.tsx` - Fehleranzeige mit Wiederholungsfunktion
-- `LogoImage.tsx` - Responsive HSRW-Logo-Komponente
+- `Button.tsx` – Erweiterte Schaltfläche mit Hover-Effekten
+- `LoadingSpinner.tsx` – Animierter Ladeindikator
+- `ErrorMessage.tsx` – Fehleranzeige mit Wiederholungsfunktion
+- `LogoImage.tsx` – Responsive HSRW-Logo-Komponente
 
 ### **Icon-System**
 
 - `HouseIcon`, `UtensilsIcon`, `UserIcon` etc.
 - Konsistente SVG-Icons mit TypeScript-Interfaces
-- Skalierbar und barrierefrei
+- Skalierbar und barrierefrei.
 
 ## 🤖 Hatty Chatbot Integration
 
 ### **Browser-basierte KI ohne API-Schlüssel**
 
-Das CampusHub System integriert den **Hatty Chatbot** - einen intelligenten Universitätsassistenten, der automatisch mit dem Backend startet:
+Das „CampusHub“ System integriert den **Hatty Chatbot** – einen intelligenten Universitätsassistenten, der automatisch mit dem Backend startet:
 
-- ✅ **Keine API-Schlüssel erforderlich** - nutzt Browser-Automation mit Google AI Studio
-- ✅ **Automatischer Start** - Browser wird beim Backend-Start geöffnet
-- ✅ **Echtzeit-Kommunikation** - Direkte Integration in die App-Oberfläche
-- ✅ **Universitätsspezifisch** - Optimiert für HSRW-Themen und Studentenfragen
+- ✅ **Keine API-Schlüssel erforderlich** – nutzt Browser-Automation mit Google AI Studio
+- ✅ **Automatischer Start** – Browser wird beim Backend-Start geöffnet
+- ✅ **Echtzeit-Kommunikation** – Direkte Integration in die App-Oberfläche
+- ✅ **Universitätsspezifisch** – Optimiert für HSRW-Themen und Studentenfragen
 
 ### **Hatty Features**
 
-- 🎓 **Universitätsfragen** - Informationen zu Kursen, Campus, Services
-- 📚 **Akademische Unterstützung** - Hilfe bei Studium und Universitätsleben
-- 🍽️ **Mensa-Integration** - Fragen zum aktuellen Menü und Essenszeiten
-- 🗺️ **Campus-Navigation** - Wegbeschreibungen und Raumfindung
+- 🎓 **Universitätsfragen** – Informationen zu Kursen, Campus, Services
+- 📚 **Akademische Unterstützung** – Hilfe bei Studium und Universitätsleben
+- 🍽️ **Mensa-Integration** – Fragen zum aktuellen Menü und Essenszeiten
+- 🗺️ **Campus-Navigation** – Wegbeschreibungen und Raumfindung
 
 ### **API-Endpunkte**
 
@@ -250,7 +250,7 @@ const response = await fetch("/api/hatty/chat", {
 
 - **Schriftfamilie**: Inter (Google Fonts)
 - **Responsive Skalierung** über Breakpoints
-- **Barrierefreie Kontrastverhältnisse**
+- **Barrierefreie Kontrastverhältnisse.**
 
 ### **Animationen**
 
@@ -272,11 +272,11 @@ npm run preview         # Produktions-Build Vorschau
 
 ### **Farbige Entwicklungs-Logs**
 
-- 🎨 **[FRONTEND]** in cyan - Vite-Entwicklungsserver
-- 🔧 **[BACKEND]** in grün - Flask mit farbigem Logging
-- ✅ **INFO** in grün - Erfolgreiche Operationen
-- ⚠️ **WARNING** in gelb - Wichtige Hinweise
-- ❌ **ERROR** in rot - Fehlerbedingungen
+- 🎨 **[FRONTEND]** in cyan – Vite-Entwicklungsserver
+- 🔧 **[BACKEND]** in grün – Flask mit farbigem Logging
+- ✅ **INFO** in grün – Erfolgreiche Operationen
+- ⚠️ **WARNING** in gelb – Wichtige Hinweise
+- ❌ **ERROR** in rot – Fehlerbedingungen
 
 ### **Hot Reload**
 
@@ -291,7 +291,7 @@ npm run preview         # Produktions-Build Vorschau
 - **Refaktorierung** der gesamten Codebasis mit logischer Struktur
 - **17+ neue Komponenten** mit ordnungsgemäßen TypeScript-Interfaces
 - **Eliminierung von Code-Duplikation** und Legacy-Dateien
-- **Zentralisierung** von API-Services und Typdefinitionen
+- **Zentralisierung** von API-Services und Typdefinitionen.
 
 ### ✅ **Responsive Design**
 
@@ -305,14 +305,14 @@ npm run preview         # Produktions-Build Vorschau
 - **Farbiges Logging-System** für besseres Debugging
 - **Echtzeit-Daten-Scraping** von der Universitäts-Website
 - **Umfassende Fehlerbehandlung** und API-Antworten
-- **CORS aktiviert** für nahtlose Frontend-Integration
+- **CORS aktiviert** für nahtlose Frontend-Integration.
 
 ### ✅ **Entwicklererfahrung**
 
 - **Ein-Befehl-Start** mit `npm run dev`
 - **Null TypeScript-Fehler** im Produktions-Build
 - **Farbkodierte Terminal-Ausgabe** für einfaches Debugging
-- **Hot Reload** für Frontend und Backend
+- **Hot Reload** für Frontend und Backend.
 
 ## 📊 Leistungsmetriken
 
@@ -325,7 +325,7 @@ npm run preview         # Produktions-Build Vorschau
 ## 🌟 Zukünftige Verbesserungen
 
 - 🔐 **Authentifizierungssystem** mit Universitätszugangsdaten
-- 📱 **Progressive Web App** (PWA) Fähigkeiten
+- 📱 **Progressive Web-App** (PWA) Fähigkeiten
 - 🔔 **Push-Benachrichtigungen** für Menü-Updates
 - 📊 **Analytics-Dashboard** für Nutzungsverfolgung
 - 🌐 **Mehrsprachige Unterstützung** (Deutsch/Englisch)
@@ -337,11 +337,11 @@ npm run preview         # Produktions-Build Vorschau
 2. Feature-Branch erstellen: `git checkout -b feature/amazing-feature`
 3. Änderungen committen: `git commit -m 'Add amazing feature'`
 4. Zum Branch pushen: `git push origin feature/amazing-feature`
-5. Pull Request öffnen
+5. Pull Request öffnen.
 
 ## 📄 Lizenz
 
-Dieses Projekt ist Teil des **IT-Projektmanagement** Kurses an der **Hochschule Rhein-Waal**.
+Dieses Projekt ist Teil des **IT-Projektmanagementkurses** an der **Hochschule Rhein-Waal**.
 
 ## 👥 Autoren
 
