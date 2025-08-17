@@ -297,6 +297,7 @@ npm run preview         # Build-Vorschau
 - **05.08.2025 11:30** - ✅ Projektdokumentation - README aktualisiert und finale Konfiguration
 - **12.08.2025 16:20** - ✅ Server-Setup - Backend-Deployment und Produktivumgebung konfiguriert
 - **17.08.2025 10:15** - ✅ **Moodle-Integration** - Vollständige Kursanbindung mit 40+ Kategorien implementiert und aktuallisiert aufgrund von HSRW Update
+- **17.08.2025 11:15** - ✅ **SSO-Link Update** - Vereinfachte Moodle-Portal Authentifizierung
 
 ### 🎯 Erreichte Ziele
 
