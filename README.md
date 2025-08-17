@@ -12,12 +12,19 @@
 
 <div align="center">
   <h3>🏫 Moderne Campus-App für die Hochschule Rhein-Waal</h3>
-  <p><em>Eine umfassende Webanwendung mit Echtzeit-Mensa-Integration, KI-Chatbot und 360° Campus-Navigator</em></p>
+  <p><em>Eine umfassende Webanwendung mit Echtzeit-Mensa-Integration, KI-Chatbot, 360° Campus-Navigator und direkter Moodle-Kursanbindung</em></p>
 </div>
 
 ---
 
 ## ✨ Hauptfeatures
+
+### 📚 **Intelligente Moodle-Integration**
+
+- **Direkter Kurszugang** zu allen Moodle-Kategorien per Klick
+- **Semesterbasierte Übersicht** mit Kreditpunkten und Dozenten
+- **Über 40 Kurse** vollständig integriert mit aktuellen Kategorie-IDs
+- **Responsive Kursfilterung** nach Semestern und Fachbereichen
 
 ### 🍽️ **Live Mensa-Integration**
 
@@ -144,7 +151,34 @@ Pannellum.js + Hochauflösende Panoramas
 }
 ```
 
-### Hatty Chatbot API
+### Moodle API Integration
+
+```javascript
+// Direkte Kurs-Navigation mit Kategorie-IDs
+const openMoodlePortal = (categoryId?: number) => {
+  if (categoryId) {
+    // Spezifische Kurskategorie öffnen
+    window.open(
+      `https://moodle.hochschule-rhein-waal.de/course/index.php?categoryid=${categoryId}`,
+      "_blank"
+    );
+  } else {
+    // Allgemeines Moodle-Portal
+    window.open(
+      "https://moodle.hochschule-rhein-waal.de/my/courses.php",
+      "_blank"
+    );
+  }
+};
+
+// Unterstützte Kurse mit Kategorie-IDs (Auswahl)
+const supportedCourses = [
+  { id: "8826", name: "IT-Projektmanagement", categoryId: 790 },
+  { id: "8823", name: "Algorithmen und Datenstrukturen", categoryId: 1147 },
+  { id: "8821", name: "Fortgeschrittene Programmierung", categoryId: 1195 },
+  // ... über 40+ weitere Kurse
+];
+```
 
 ```javascript
 // POST /api/hatty/chat - Chat mit KI-Bot
@@ -245,6 +279,32 @@ npm run preview         # Build-Vorschau
 - ✅ **INFO** in Grün - Erfolgreiche Operationen
 - ⚠️ **WARNING** in Gelb - Wichtige Hinweise
 - ❌ **ERROR** in Rot - Fehlerbedingungen
+
+---
+
+## 📅 Projekt-Timeline (SS2025)
+
+### Meilensteine & Entwicklungsphase
+
+- **20.04.2025 09:00** - ✅ Projektstart - Hochschulwebseite mit Chatbot Hatty initialisiert
+- **29.04.2025 14:30** - ✅ Hatty Version 1.0 - Chatbot Grundfunktionalität implementiert (Sprint 1 Ende - 3 Wochen)
+- **28.05.2025 10:15** - ✅ Implementierungsphase - Erster responsiver Web-Frontend Prototyp
+- **15.06.2025 16:45** - ✅ Design-Review Version 1.0 - Funktionalitäts- und Design-Review des Web-Frontend-Prototyps
+- **24.06.2025 11:20** - ✅ Version 2.0 - Überarbeitung mit Mensa-Plan Integration
+- **25.06.2025 14:30** - ✅ Vollständige Oberfläche - Kalender, Stundenplan, Kursübersicht, News Feed und Chatbot-Integration
+- **10.07.2025 13:15** - ✅ Campus Navigator - Neue Kernfunktion mit interaktiver Karte implementiert
+- **22.07.2025 15:45** - ✅ Technische Dokumentation - API Services, Tests und umfassende Systemdokumentation
+- **05.08.2025 11:30** - ✅ Projektdokumentation - README aktualisiert und finale Konfiguration
+- **12.08.2025 16:20** - ✅ Server-Setup - Backend-Deployment und Produktivumgebung konfiguriert
+- **17.08.2025 10:15** - ✅ **Moodle-Integration** - Vollständige Kursanbindung mit 40+ Kategorien implementiert und aktuallisiert aufgrund von HSRW Update
+
+### 🎯 Erreichte Ziele
+
+- **📚 Moodle-Integration:** Direkter Zugriff auf alle HSRW-Kurse
+- **🤖 KI-Chatbot:** Gemini-powered Hatty mit persistenter Historie
+- **🍽️ Live-Daten:** Echtzeit Mensa-Integration
+- **🗺️ 360° Navigation:** Vollständige Campus-Abdeckung
+- **📱 Mobile-First:** Responsive Design für alle Endgeräte
 
 ---
 
