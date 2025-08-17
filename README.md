@@ -358,3 +358,5 @@ Wir freuen uns über Beiträge! So kannst du mitmachen:
   <p><strong>Entwickelt mit ❤️ für HSRW-Studierende</strong></p>
   <p><em>Eine moderne, vollständige Campus-Lösung für das digitale Studentenleben</em></p>
 </div>
+
+
