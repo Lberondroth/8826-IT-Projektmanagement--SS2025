@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Logo } from "../ui/Logo";
 import { HouseIcon } from "../icons/HouseIcon";
 import { UserIcon } from "../icons/UserIcon";
 import BottomNavigation from "../ui/BottomNavigation";
 import HattyChatbot from "../ui/HattyChatbot";
+import StundenplanModal from "../ui/StundenplanModal";
 import type { HomeScreenProps } from "../../types";
 
 // Import actual logo images
@@ -34,7 +35,7 @@ const MensaIcon: React.FC<{ className?: string }> = ({ className }) => (
 );
 
 const StundenplanIcon: React.FC<{ className?: string }> = ({ className }) => (
-  <LogoImage src={stundenplanLogo} alt="Stundenplan" className={className} />
+  <LogoImage src={stundenplanLogo} alt="Kalender" className={className} />
 );
 
 const KurseIcon: React.FC<{ className?: string }> = ({ className }) => (
@@ -65,7 +66,7 @@ const NavStundenplanIcon: React.FC<{ className?: string }> = ({
 }) => (
   <LogoImage
     src={stundenplanLogo}
-    alt="Stundenplan"
+    alt="Kalender"
     className={className ?? "w-6 h-6 sm:w-7 sm:h-7"}
   />
 );
@@ -88,6 +89,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
 }) => {
   const userName = "user"; // This could be dynamic in a real app
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const [isStundenplanOpen, setIsStundenplanOpen] = useState(false);
 
   const gridItems = [
     {
@@ -98,7 +100,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
     },
     {
       id: "stundenplan",
-      label: "Stundenplan",
+      label: "Kalender",
       Icon: StundenplanIcon,
       action: onNavigateToCalendar,
     },
@@ -116,9 +118,9 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
     },
     {
       id: "benachrichtigungen",
-      label: "Benachrichtig-\nungen",
+      label: "Stundenplan",
       Icon: BenachrichtigungenIcon,
-      action: () => console.log("Benachrichtigungen clicked"),
+      action: () => setIsStundenplanOpen(true),
     },
     {
       id: "campusplan",
@@ -138,7 +140,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
     },
     {
       id: "calendar",
-      label: "Stundenplan",
+      label: "Kalender",
       Icon: NavStundenplanIcon,
       active: false,
       action: onNavigateToCalendar,
@@ -230,6 +232,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
       <HattyChatbot
         isOpen={isChatbotOpen}
         onToggle={() => setIsChatbotOpen(!isChatbotOpen)}
+      />
+
+      {/* Stundenplan Modal */}
+      <StundenplanModal
+        isOpen={isStundenplanOpen}
+        onClose={() => setIsStundenplanOpen(false)}
       />
     </div>
   );

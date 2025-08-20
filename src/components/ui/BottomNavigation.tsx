@@ -33,7 +33,7 @@ const NavStundenplanIcon: React.FC<{ className?: string }> = ({
 }) => (
   <NavLogoImage
     src={stundenplanLogo}
-    alt="Stundenplan"
+    alt="Kalender"
     className={className ?? "w-6 h-6 sm:w-7 sm:h-7"}
   />
 );
