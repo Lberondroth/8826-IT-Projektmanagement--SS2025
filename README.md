@@ -23,7 +23,7 @@
 
 - **Direkter Kurszugang** zu allen Moodle-Kategorien per Klick
 - **Semesterbasierte Übersicht** mit Kreditpunkten und Dozenten
-- **Über 40 Kurse** vollständig integriert mit aktuellen Kategorie-IDs
+- **Über 30 Kurse** vollständig integriert mit aktuellen Kategorie-IDs
 - **Responsive Kursfilterung** nach Semestern und Fachbereichen
 
 ### 🍽️ **Live Mensa-Integration**
