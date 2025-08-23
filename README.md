@@ -21,7 +21,15 @@ Eine moderne, responsive Webanwendung für Studierende der **Hochschule Rhein-Wa
 - **HSRW Markenfarben** und professionelles Styling
 - **Barrierefreiheit** mit ARIA-Labels
 
-### 🏗️ **Technische Exzellenz**
+### 🌟 **Erweiterte Features**
+
+- **🍪 GDPR-Compliance** - Cookie-Banner mit benutzerfreundlicher Zustimmung
+- **🧭 Bottom-Navigation** - Mobile-optimierte Haupt-Navigation mit Touch-Feedback
+- **📱 Progressive Responsive Design** - Mobile-First mit Tablet- und Desktop-Optimierung
+- **🎯 Tooltip-System** - Interaktive Hilfestellungen in der Campus-Navigation
+- **⚡ Scene-Management** - Dynamisches Laden und Wechseln zwischen 360°-Ansichten
+- **🔄 Auto-Scroll** - Chat-Verlauf scrollt automatisch zu neuen Nachrichten
+- **🎨 Hover-States** - Professionelle UI-Animationen für alle interaktiven Elemente
 
 - **TypeScript** für Typsicherheit und bessere Entwicklererfahrung
 - **React 19** mit modernen Hooks und Komponentenarchitektur
@@ -39,25 +47,34 @@ Eine moderne, responsive Webanwendung für Studierende der **Hochschule Rhein-Wa
 
 ### Automatische Installation & Start
 
-**Option 1: Einfache Batch-Datei (empfohlen)**
+### Automatische Installation & Start
+
+**Option 1: Windows Batch-Datei (empfohlen für Windows)**
 
 ```cmd
 # Doppelklick auf start-app.bat oder:
 start-app.bat
 ```
 
-**Option 2: Kommandozeile**
+**Option 2: PowerShell-Script (erweiterte Windows-Funktionalität)**
+
+```powershell
+# Farbkodierte Ausgabe und detaillierte Informationen:
+start-app.ps1
+```
+
+**Option 3: Plattformübergreifende Kommandozeile**
 
 ```bash
-# Alles in einem Befehl starten
+# Ein-Befehl-Start für alle Plattformen
 npm run dev
 ```
 
-Das war's! Beide Befehle starten automatisch:
+Das war's! Alle drei Optionen starten automatisch:
 
-- ✅ Frontend (Vite Dev Server)
-- ✅ Backend (Flask API Server)
-- ✅ Hatty Chatbot (Browser-basiert)
+- ✅ **Frontend** (Vite Dev Server) auf http://localhost:5173
+- ✅ **Backend** (Flask API Server) auf http://localhost:5000  
+- ✅ **Hatty Chatbot** (Browser-basiert mit Auto-Launch)
 
 ### URLs nach dem Start
 
@@ -137,17 +154,26 @@ Intelligente Raumerkennung und -zuordnung für Stundenplan-Integration:
 - **🏗️ Gebäude-Mapping** - Automatische Zuordnung von Räumen zu Campus-Gebäuden
 - **📊 Echtzeit-Terminintegration** - Direkte Verbindung zum Stundenplan-System
 
-### **Technische Umsetzung**
+### **Intelligente Raumerkennung**
 
 ```python
-# Beispiel der Raumanalyse-Logik
+# Beispiel der erweiterten Raumanalyse-Logik
 def _parse_raum_detail(self, raum_string_original):
-    # Unterstützt verschiedene Raumformate:
-    # - Numerisch (GSR): "0100001" → Gebäude 01, Stock 00, Raum 001
-    # - Komma-separiert: "01, 00, 001" 
-    # - Online: "digital/online"
-    # - TBA: "tba" (To Be Announced)
+    """
+    Unterstützt verschiedene HSRW-Raumformate:
+    - Numerisch (GSR): "0100001" → Gebäude 01, Stock 00, Raum 001
+    - Komma-separiert: "01, 00, 001" 
+    - Online-Kurse: "digital/online" → Keine Campus-Ansicht
+    - TBA-Räume: "tba" (To Be Announced) → Fallback-Darstellung
+    """
 ```
+
+**Features des Room-Parsing-Systems:**
+- 🏢 **Gebäude-Zuordnung** - Automatische Erkennung des Campus-Gebäudes
+- 📊 **Stock-Identifikation** - Präzise Stockwerk-Zuordnung für Navigation  
+- 🎯 **Raum-Lokalisation** - Exakte Raumnummer-Extraktion
+- 🌐 **Online-Behandlung** - Spezielle Logik für digitale Veranstaltungen
+- ⏳ **TBA-Management** - Elegante Behandlung noch unbestimmter Räume
 
 ### **Gebäude-Datenbank**
 
@@ -289,23 +315,77 @@ GET  /api/hatty/status   # Bot-Status und Verfügbarkeit prüfen
 - `IconProps.tsx` - Konsistente TypeScript-Interfaces für alle Icons
 - Skalierbar, barrierefrei und performant-optimiert
 
+## 📰 Intelligentes News-System
+
+### **Kategorisierte Universitätsnachrichten**
+
+Das News-System bietet eine strukturierte Informationsverteilung mit intelligenter Priorisierung:
+
+- **🔴 Klausur-Nachrichten** - Wichtige Termine und Prüfungsinfos (Priorität: Hoch)
+- **📅 Deadline-Benachrichtigungen** - Anmeldefristen und wichtige Termine (Priorität: Hoch) 
+- **🎉 Campus-Events** - Veranstaltungen und Aktivitäten (Priorität: Mittel)
+- **📢 Allgemeine Ankündigungen** - Universitätsnachrichten (Priorität: Niedrig-Mittel)
+
+### **TypeScript-Interface für News-Management**
+
+```typescript
+interface NewsItem {
+  id: string;
+  title: string;
+  content: string;
+  date: string;
+  type: "klausur" | "deadline" | "event" | "announcement";
+  priority: "high" | "medium" | "low";
+}
+```
+
+### **Beispiel-Nachrichten aus dem System**
+
+- **Klausurtermine Sommersemester 2025 veröffentlicht** (Priorität: Hoch)
+- **Campus-Festival am 28. Juni 2025** (Event, Priorität: Mittel)
+- **Anmeldung für Wahlpflichtfächer bis 30. Juni** (Deadline, Priorität: Hoch)
+- **Bibliothek: Erweiterte Öffnungszeiten in der Klausurphase** (Ankündigung)
+
 ## 🤖 Hatty Chatbot Integration
 
 ### **Browser-basierte KI ohne API-Schlüssel**
 
-Das CampusHub System integriert den **Hatty Chatbot** - einen intelligenten Universitätsassistenten, der automatisch mit dem Backend startet:
+Das CampusHub System integriert den **Hatty Chatbot** - einen intelligenten Universitätsassistenten:
 
-- ✅ **Keine API-Schlüssel erforderlich** - nutzt Browser-Automation mit Google AI Studio
-- ✅ **Automatischer Start** - Browser wird beim Backend-Start geöffnet
-- ✅ **Echtzeit-Kommunikation** - Direkte Integration in die App-Oberfläche
+- ✅ **Keine API-Schlüssel erforderlich** - Browser-Automation mit Google AI Studio
+- ✅ **Automatischer Start** - Browser wird beim Backend-Start geöffnet  
+- ✅ **Echtzeit-Kommunikation** - React-Integration mit TypeScript-Interfaces
+- ✅ **Persistente Chat-Historie** - Nachrichtenverlauf mit Zeitstempel
 - ✅ **Universitätsspezifisch** - Optimiert für HSRW-Themen und Studentenfragen
 
-### **Hatty Features**
+### **React-Integration mit TypeScript**
 
-- 🎓 **Universitätsfragen** - Informationen zu Kursen, Campus, Services
-- 📚 **Akademische Unterstützung** - Hilfe bei Studium und Universitätsleben
-- 🍽️ **Mensa-Integration** - Fragen zum aktuellen Menü und Essenszeiten
+```typescript
+interface HattyMessage {
+  id: string;
+  text: string;
+  isUser: boolean;
+  timestamp: Date;
+}
+
+// Hatty Service für API-Kommunikation
+const sendMessage = async (message: string) => {
+  const response = await fetch("/api/hatty/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message }),
+  });
+  return response.json();
+};
+```
+
+### **Erweiterte Features**
+
+- 🎓 **Universitätsfragen** - Kurse, Campus, Services, Stundenplan
+- 📚 **Akademische Unterstützung** - Studium und Universitätsleben
+- 🍽️ **Mensa-Integration** - Aktuelles Menü und Essenszeiten
 - 🗺️ **Campus-Navigation** - Wegbeschreibungen und Raumfindung
+- 💬 **Persistente Chats** - Nahtlose Gesprächsverläufe mit Scroll-to-Bottom
 
 ### **API-Endpunkte**
 
