@@ -350,7 +350,7 @@ Wir freuen uns über Beiträge! So kannst du mitmachen:
 
 **Projekt:** IT-Projektmanagement Kurs SS2025  
 **Institution:** Hochschule Rhein-Waal  
-**Entwickler:** Louis M. (Kontakt über HSRW-Platform)
+**Entwickler:** Louis B. (Kontakt über HSRW-Platform)
 
 ---
 
