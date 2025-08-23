@@ -114,8 +114,51 @@ Dieser einzelne Befehl startet automatisch:
 - 📅 **Stundenplan** - Stundenplan mit Übersicht
 - 📰 **News** - Universitätsnachrichten
 - 🔔 **Kalender** - Kalender mit aktuellen Events
-- 🗺️ **Campus-Navigator** - Interaktive 360° Campus-Karte
+- 🗺️ **Campus-Navigator** - Interaktive 360° Campus-Karte mit Panorama-Ansichten und Raumfinder
 - 🌐 **Hatty** - Hochschul-Chatbot
+
+## 🗺️ Campus Navigator - Erweiterte Features
+
+### **360° Panorama-Navigation**
+
+Das Campus-Navigator System bietet eine immersive 360° Erkundung des HSRW Campus:
+
+- **🏢 Interaktive Gebäude-Ansichten** - Hochauflösende Panorama-Bilder von jedem Campus-Gebäude
+- **🎯 Präzise Hotspot-Navigation** - Klickbare Bereiche für nahtlose Szenenübergänge
+- **📍 Intelligente Karten-Pointer** - Visuelle Campus-Karte mit klickbaren Gebäude-Markierungen
+- **🎮 Intuitive Steuerung** - Maus/Touch-Navigation mit Zoom und Orientierung
+
+### **Raumfinder-System**
+
+Intelligente Raumerkennung und -zuordnung für Stundenplan-Integration:
+
+- **🔍 Automatische Raumanalyse** - Verarbeitung verschiedener Raumformaten (GSR-Nummer, Komma-separiert)
+- **📱 Online/TBA-Behandlung** - Spezielle Anzeige für digitale und noch unbestimmte Räume
+- **🏗️ Gebäude-Mapping** - Automatische Zuordnung von Räumen zu Campus-Gebäuden
+- **📊 Echtzeit-Terminintegration** - Direkte Verbindung zum Stundenplan-System
+
+### **Technische Umsetzung**
+
+```python
+# Beispiel der Raumanalyse-Logik
+def _parse_raum_detail(self, raum_string_original):
+    # Unterstützt verschiedene Raumformate:
+    # - Numerisch (GSR): "0100001" → Gebäude 01, Stock 00, Raum 001
+    # - Komma-separiert: "01, 00, 001" 
+    # - Online: "digital/online"
+    # - TBA: "tba" (To Be Announced)
+```
+
+### **Gebäude-Datenbank**
+
+Umfassende Campus-Abdeckung mit detaillierten Gebäudeinformationen:
+
+- **Gebäude 01** - Hörsaalzentrum (Haupteingang und Innenansichten)
+- **Gebäude 02** - Bibliothek und Usability-Labor
+- **Gebäude 03** - FabLab und AIS-Labor  
+- **Gebäude 08** - Green FabLab (Außen- und Innenbereich)
+- **Campus Mitte** - Zentrale Übersichts-Perspektive
+
 
 ## 🛠️ Technische Architektur
 
@@ -124,28 +167,44 @@ Dieser einzelne Befehl startet automatisch:
 ```
 src/
 ├── components/
-│   ├── icons/          # SVG-Icon-Komponenten
-│   ├── screens/        # Seitenebene-Komponenten
+│   ├── icons/          # SVG-Icon-Komponenten (10+ Icons)
+│   ├── screens/        # Seitenebene-Komponenten (7 Hauptscreens)
 │   └── ui/             # Wiederverwendbare UI-Komponenten
-├── services/           # API-Integrationsschicht
+├── services/           # API-Integrationsschicht (ApiService, hattyService)
 ├── styles/             # Tailwind CSS-Konfiguration
-└── types/              # TypeScript-Definitionen
+├── types/              # TypeScript-Definitionen
+└── assets/             # Bilder und statische Ressourcen
 ```
 
 ### **Backend (Flask + Python)**
 
 ```
 backend/
-├── app.py             # Haupt-Flask-Anwendung
-└── requirements.txt   # Python-Abhängigkeiten
+├── app.py                    # Haupt-Flask-Anwendung mit farbigem Logging
+├── hatty_gemini.py          # Hatty-Chatbot Integration
+├── requirements.txt         # Python-Abhängigkeiten
+└── test_*.py               # Umfassende Test-Suite für alle Features
+```
+
+### **Campus-Plan System**
+
+```
+Campus-plan/
+├── interactiveMap.py        # Stundenplan-Manager und Gebäude-Mapping
+├── interactive_map_2025.html # 360° Panorama-Viewer (Pannellum.js)
+├── Bilder/                  # Hochauflösende Panorama-Bilder
+└── Page/                    # Zusätzliche Kartenressourcen
 ```
 
 ### **Schlüsseltechnologien**
 
-- **Frontend**: React 19, TypeScript, Tailwind CSS, Vite
-- **Backend**: Flask, Python, BeautifulSoup (Web-Scraping)
-- **Build**: Vite mit PostCSS und Tailwind
-- **Entwicklung**: Concurrently für Auto-Start-Workflow
+- **Frontend**: React 19, TypeScript, Tailwind CSS 4.1, Vite 6.x
+- **Backend**: Flask, Python 3.8+, BeautifulSoup4 (Web-Scraping), CORS
+- **3D/Panorama**: Pannellum.js für 360° Campus-Navigation
+- **AI-Integration**: Hatty Chatbot (Browser-automatisiert, Google AI Studio)
+- **Build-Tools**: Vite mit PostCSS, Autoprefixer, Tailwind-Compiler
+- **Entwicklung**: Concurrently für parallelen Frontend/Backend-Start
+- **Logging**: Farb-kodiertes Python-Logging-System für besseres Debugging
 
 ## 🎯 Mensa-Integration Details
 
@@ -157,47 +216,78 @@ backend/
 
 ### **API-Endpunkte**
 
+### **API-Endpunkte**
+
+Das Backend bietet folgende REST-API-Endpunkte:
+
 ```http
-GET /api/mensa    # Aktuelle Menüdaten abrufen
-GET /api/health   # Backend-Gesundheitsprüfung
+# Mensa-Integration
+GET  /api/mensa          # Aktuelle Menüdaten mit Echtzeit-Scraping
+GET  /api/health         # Backend-Gesundheitsprüfung
+
+# Hatty Chatbot
+POST /api/hatty/chat     # Chat mit Hatty Bot (JSON: {message: string})
+GET  /api/hatty/status   # Bot-Status und Verfügbarkeit prüfen
 ```
 
-### **Beispiel-Antwort**
+### **Erweiterte API-Antwortformate**
 
+**Mensa API Response:**
 ```json
 {
   "date": "10.06.2025",
-  "day": "Dienstag",
+  "day": "Dienstag", 
+  "lastUpdated": "2025-06-10T10:30:00.123Z",
   "items": [
     {
       "title": "Essen I",
       "description": ["Pasta (20a)", "Sauce bolognaise [R] (22)"],
-      "price": "1,50 €"
+      "price": "1,50 €",
+      "image": "https://example.com/menu-image.jpg"
     }
   ]
 }
 ```
 
+**Hatty Chat Response:**
+```json
+{
+  "response": "Das heutige Mensamenü enthält...",
+  "status": "success",
+  "timestamp": "2025-06-10T10:30:00.123Z"
+}
+```
+
 ## 🧩 Komponentenarchitektur
 
-### **Bildschirm-Komponenten**
+### **Bildschirm-Komponenten (7 Hauptscreens)**
 
-- `HomeScreen.tsx` - Haupt-Dashboard mit Service-Raster
+- `HomeScreen.tsx` - Haupt-Dashboard mit Service-Raster und Navigation
 - `LoginScreen.tsx` - Benutzerauthentifizierungs-Oberfläche
-- `MensaScreen.tsx` - Live-Menü-Anzeige mit Ladezuständen
+- `MensaScreen.tsx` - Live-Menü-Anzeige mit Echtzeit-Scraping
+- `CampusMapScreen.tsx` - 360° Panorama-Navigation und Gebäude-Exploration
+- `NewsScreen.tsx` - Universitätsnachrichten mit Prioritäts-System
+- `CalendarScreen.tsx` - Kalender mit Event-Management
+- `KurseScreen.tsx` - Kursverwaltung und Stundenplan-Integration
 
-### **UI-Komponenten**
+### **UI-Komponenten (9 Wiederverwendbare Komponenten)**
 
-- `Button.tsx` - Erweiterte Schaltfläche mit Hover-Effekten
-- `LoadingSpinner.tsx` - Animierter Ladeindikator
+- `Button.tsx` - Erweiterte Schaltfläche mit Hover-Effekten und Varianten
+- `LoadingSpinner.tsx` - Animierter Ladeindikator mit Smooth-Rotation
 - `ErrorMessage.tsx` - Fehleranzeige mit Wiederholungsfunktion
 - `LogoImage.tsx` - Responsive HSRW-Logo-Komponente
+- `HattyChatbot.tsx` - Integrierter AI-Chatbot mit Echtzeitfeedback
+- `BottomNavigation.tsx` - Mobile-optimierte Haupt-Navigation
+- `StundenplanModal.tsx` - Modal für Stundenplan-Details
+- `CookieBanner.tsx` - GDPR-konforme Cookie-Zustimmung
+- `Logo.tsx` - Zusätzliche Logo-Darstellungskomponente
 
-### **Icon-System**
+### **Icon-System (10 Skalierbare SVG-Icons)**
 
-- `HouseIcon`, `UtensilsIcon`, `UserIcon` etc.
-- Konsistente SVG-Icons mit TypeScript-Interfaces
-- Skalierbar und barrierefrei
+- `HouseIcon`, `UtensilsIcon`, `UserIcon`, `BookOpenIcon`, `NewspaperIcon`
+- `CalendarDaysIcon`, `MapMarkerAltIcon`, `BullhornIcon`, `ArrowLeftIcon`
+- `IconProps.tsx` - Konsistente TypeScript-Interfaces für alle Icons
+- Skalierbar, barrierefrei und performant-optimiert
 
 ## 🤖 Hatty Chatbot Integration
 
@@ -288,7 +378,7 @@ npm run preview         # Produktions-Build Vorschau
 ### ✅ **Code-Organisation**
 
 - **Refaktorierung** der gesamten Codebasis mit logischer Struktur
-- **17+ neue Komponenten** mit ordnungsgemäßen TypeScript-Interfaces
+- **30+ neue Komponenten** mit ordnungsgemäßen TypeScript-Interfaces
 - **Eliminierung von Code-Duplikation** und Legacy-Dateien
 - **Zentralisierung** von API-Services und Typdefinitionen
 
@@ -315,8 +405,8 @@ npm run preview         # Produktions-Build Vorschau
 
 ## 📊 Leistungsmetriken
 
-- **Build-Zeit**: < 1 Sekunde (985ms)
-- **Bundle-Größe**: 201.40 kB (gzipped: 63.10 kB)
+- **Build-Zeit**: ~1.13 Sekunden
+- **Bundle-Größe**: 255.33 kB (gzipped: 73.35 kB)
 - **API-Antwort**: Unter-Sekunden Mensa-Daten-Abruf
 - **TypeScript**: Null Kompilierungsfehler
 - **Lighthouse-Score**: Optimiert für Leistung und Barrierefreiheit
