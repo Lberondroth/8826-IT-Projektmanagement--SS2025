@@ -111,10 +111,11 @@ Dieser einzelne Befehl startet automatisch:
 
 - 🍽️ **Mensa** - Echtzeit-Cafeteria-Menü
 - 📚 **Kurse** - Kursverwaltung
-- 📅 **Stundenplan** - Stundenplan-Übersicht
+- 📅 **Stundenplan** - Stundenplan mit Übersicht
 - 📰 **News** - Universitätsnachrichten
-- 🔔 **Benachrichtigungen** - Benachrichtigungen
-- 🗺️ **Campus-Plan** - Interaktive Campus-Karte
+- 🔔 **Kalender** - Kalender mit aktuellen Events
+- 🗺️ **Campus-Navigator** - Interaktive 360° Campus-Karte
+- 🌐 **Hatty** - Hochschul-Chatbot
 
 ## 🛠️ Technische Architektur
 
