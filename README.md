@@ -37,7 +37,7 @@
 - **Gemini API-Integration** für intelligente Konversationen
 - **Universitätsspezifisch** - beantwortet HSRW-bezogene Fragen
 - **Persistente Chat-Historie** mit Echtzeit-Feedback
-- **Zero-Configuration** - keine API-Schlüssel erforderlich
+- **API-Key Konfiguration** - einfache Integration via `.env` (`GOOGLE_API_KEY`)
 
 ### 🗺️ **360° Campus-Navigator**
 
@@ -60,9 +60,46 @@
 
 - **Node.js** 18+ mit npm
 - **Python** 3.8+ mit pip
+- **Google Gemini API-Key** (kostenlos erstellbar unter [Google AI Studio](https://aistudio.google.com/app/apikey))
 - Moderner Webbrowser
 
-### ⚡ Ein-Klick-Installation
+### ⚙️ Einrichtung & Konfiguration
+
+Vor dem ersten Start müssen die Abhängigkeiten installiert und die Umgebungsvariablen eingerichtet werden:
+
+1. **Repository klonen & öffnen:**
+   ```bash
+   git clone https://github.com/Lberondroth/8826-IT-Projektmanagement--SS2025.git
+   cd 8826-IT-Projektmanagement--SS2025
+   ```
+
+2. **Umgebungsvariablen einrichten (`.env`):**  
+   Kopiere die bereitgestellte Vorlage `.env.example` in eine neue `.env`-Datei:
+   ```bash
+   # Windows (PowerShell)
+   Copy-Item .env.example .env
+
+   # Linux / macOS / Git Bash
+   cp .env.example .env
+   ```
+   Öffne die `.env`-Datei und trage deinen persönlichen Gemini API-Schlüssel ein:
+   ```env
+   GOOGLE_API_KEY=dein_gemini_api_key_hier
+   ```
+   > ⚠️ **Wichtig:** Ohne gesetzten `GOOGLE_API_KEY` bricht der Start des Chatbots "Hatty" mit einem Fehler ab (`ValueError: GOOGLE_API_KEY not found in environment variables`).
+
+3. **Abhängigkeiten installieren:**
+   ```bash
+   # Frontend-Pakete installieren
+   npm install
+
+   # Backend-Pakete installieren (optional, wird auch durch die Startskripte erledigt)
+   cd backend
+   pip install -r requirements.txt
+   cd ..
+   ```
+
+### ⚡ Starten der Anwendung
 
 **Windows (Empfohlen):**
 
@@ -78,7 +115,7 @@ start-app.bat
 ./start-app.ps1
 ```
 
-**Cross-Platform:**
+**Cross-Platform / Manuell:**
 
 ```bash
 # Startet Frontend und Backend parallel
@@ -343,6 +380,23 @@ Wir freuen uns über Beiträge! So kannst du mitmachen:
 - **Tailwind CSS** für konsistentes Styling
 - **React Hooks** für moderne Komponentenarchitektur
 - **API-First** Design für Backend-Integration
+
+---
+
+## 👤 Mein Anteil am Projekt
+
+> **Hinweis zur Team- und Eigenleistung:**  
+> Das ursprüngliche Design und der erste Klick-Prototyp wurden im Team von den Kollegen entworfen. Die **gesamte technische Konzeption, die Übertragung des Designs vom Klick-Prototyp in die funktionale Campus-App sowie die komplette Frontend- und Backend-Entwicklung** erfolgten eigenständig durch mich.
+
+### 🛠️ Durchgeführte Arbeiten & Eigenanteil:
+- **Design-Transformation (Klick-Prototyp ➔ Campus-App):** Übertragung, Veredelung und responsives Refactoring des Entwurfs der Kollegen in ein hochmodernes Component-System mit **Tailwind CSS**.
+- **Frontend-Entwicklung:** Vollständige technische Implementierung der Single-Page-Application in **React 19**, **TypeScript** und **Vite** mit allen 7 Screens (Home-Dashboard, Live-Mensa, Campus-Navigator, News-Feed, Event-Kalender, Stundenplan/Kurse, Hatty-Chatbot).
+- **Backend & REST-API:** Eigenständige Konzeption und Entwicklung des modularen **Flask-Backends** (Python), CORS-Konfiguration, farbkodiertes Logging sowie strukturierte Endpoints.
+- **Live Mensa-Scraping:** Entwicklung des Scrapers zur Live-Extraktion des Speiseplans der Mensa Kleve (Studierendenwerk Düsseldorf) mit automatischer Erkennung von Gerichten, Preisen und Allergenen.
+- **360° Campus-Navigator:** Interaktives Orientierungssystem auf Basis von **Pannellum.js** mit hochauflösenden Campus-Panoramen, intelligentem Raum-Parser (`_parse_raum_detail`) und Raumverknüpfung zum Stundenplan.
+- **KI-Chatbot „Hatty“:** Vollständige Konzeption und Integration der **Google Gemini API** (`gemini-2.0-flash-exp`) mit universitätsspezifischem Systemprompt, LangChain-Memory und Chat-Endpoints.
+- **Moodle-Integration:** Direkte Kursanbindung von über 40 HSRW-Kursen mit entsprechenden Moodle-Kategorie-IDs für den schnellen Direktzugriff.
+- **Projekt-Tooling & Automatisierung:** Erstellung von One-Click-Startskripten (`start-app.bat`, `start-app.ps1`, `start_backend.bat`), Performance-Tests und Bereinigung der Projektstruktur.
 
 ---
 
