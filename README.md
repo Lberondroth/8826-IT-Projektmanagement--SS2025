@@ -34,10 +34,10 @@
 
 ### 🤖 **"Hatty" KI-Chatbot**
 
-- **Gemini API-Integration** für intelligente Konversationen
-- **Universitätsspezifisch** - beantwortet HSRW-bezogene Fragen
-- **Persistente Chat-Historie** mit Echtzeit-Feedback
-- **API-Key Konfiguration** - einfache Integration via `.env` (`GOOGLE_API_KEY`)
+- **Gemini API-Integration:** Intelligente Konversationen mit Kontextbezug
+- **Universitätsspezifisch:** Beantwortet HSRW-bezogene Fragen
+- **Persistente Chat-Historie:** Mit Echtzeit-Feedback
+- **API-Key Konfiguration:** Einfache Integration via `.env` (`GOOGLE_API_KEY`)
 
 ### 🗺️ **360° Campus-Navigator**
 
@@ -269,11 +269,11 @@ def _parse_raum_detail(self, raum_string_original):
 
 ### Campus-Abdeckung
 
-- **Gebäude 01** - Hörsaalzentrum (Haupteingang & Innenansichten)
-- **Gebäude 02** - Bibliothek & Usability-Labor
-- **Gebäude 03** - FabLab & AIS-Labor
-- **Gebäude 08** - Green FabLab (Außen & Innen)
-- **Campus Mitte** - Zentrale Übersichtsperspektive
+- **Gebäude 01:** Hörsaalzentrum (Haupteingang & Innenansichten)
+- **Gebäude 02:** Bibliothek & Usability-Labor
+- **Gebäude 03:** FabLab & AIS-Labor
+- **Gebäude 08:** Green FabLab (Außen & Innen)
+- **Campus Mitte:** Zentrale Übersichtsperspektive
 
 ---
 
@@ -311,11 +311,11 @@ npm run preview         # Build-Vorschau
 
 ### Farbkodierte Logs
 
-- 🎨 **[FRONTEND]** in Cyan - Vite Development Server
-- 🔧 **[BACKEND]** in Grün - Flask mit farbigem Logging
-- ✅ **INFO** in Grün - Erfolgreiche Operationen
-- ⚠️ **WARNING** in Gelb - Wichtige Hinweise
-- ❌ **ERROR** in Rot - Fehlerbedingungen
+- 🎨 **[FRONTEND]** in Cyan: Vite Development Server
+- 🔧 **[BACKEND]** in Grün: Flask mit farbigem Logging
+- ✅ **INFO** in Grün: Erfolgreiche Operationen
+- ⚠️ **WARNING** in Gelb: Wichtige Hinweise
+- ❌ **ERROR** in Rot: Fehlerbedingungen
 
 ---
 
@@ -323,18 +323,18 @@ npm run preview         # Build-Vorschau
 
 ### Meilensteine & Entwicklungsphase
 
-- **20.04.2025 09:00** - ✅ Projektstart - Hochschulwebseite mit Chatbot Hatty initialisiert
-- **29.04.2025 14:30** - ✅ Hatty Version 1.0 - Chatbot Grundfunktionalität implementiert (Sprint 1 Ende - 3 Wochen)
-- **28.05.2025 10:15** - ✅ Implementierungsphase - Erster responsiver Web-Frontend Prototyp
-- **15.06.2025 16:45** - ✅ Design-Review Version 1.0 - Funktionalitäts- und Design-Review des Web-Frontend-Prototyps
-- **24.06.2025 11:20** - ✅ Version 2.0 - Überarbeitung mit Mensa-Plan Integration
-- **25.06.2025 14:30** - ✅ Vollständige Oberfläche - Kalender, Stundenplan, Kursübersicht, News Feed und Chatbot-Integration
-- **10.07.2025 13:15** - ✅ Campus Navigator - Neue Kernfunktion mit interaktiver Karte implementiert
-- **22.07.2025 15:45** - ✅ Technische Dokumentation - API Services, Tests und umfassende Systemdokumentation
-- **05.08.2025 11:30** - ✅ Projektdokumentation - README aktualisiert und finale Konfiguration
-- **12.08.2025 16:20** - ✅ Server-Setup - Backend-Deployment und Produktivumgebung konfiguriert
-- **17.08.2025 10:15** - ✅ **Moodle-Integration** - Vollständige Kursanbindung mit 40+ Kategorien implementiert und aktuallisiert aufgrund von HSRW Update
-- **17.08.2025 11:15** - ✅ **SSO-Link Update** - Vereinfachte Moodle-Portal Authentifizierung
+- **20.04.2025 09:00:** ✅ Projektstart – Hochschulwebseite mit Chatbot Hatty initialisiert
+- **29.04.2025 14:30:** ✅ Hatty Version 1.0 – Chatbot-Grundfunktionalität implementiert (Sprint 1 Ende – 3 Wochen)
+- **28.05.2025 10:15:** ✅ Implementierungsphase – Erster responsiver Web-Frontend Prototyp
+- **15.06.2025 16:45:** ✅ Design-Review Version 1.0 – Funktionalitäts- und Design-Review des Web-Frontend-Prototyps
+- **24.06.2025 11:20:** ✅ Version 2.0 – Überarbeitung mit Mensa-Plan Integration
+- **25.06.2025 14:30:** ✅ Vollständige Oberfläche – Kalender, Stundenplan, Kursübersicht, News Feed und Chatbot-Integration
+- **10.07.2025 13:15:** ✅ Campus Navigator – Neue Kernfunktion mit interaktiver Karte implementiert
+- **22.07.2025 15:45:** ✅ Technische Dokumentation – API Services, Tests und umfassende Systemdokumentation
+- **05.08.2025 11:30:** ✅ Projektdokumentation – README aktualisiert und finale Konfiguration
+- **12.08.2025 16:20:** ✅ Server-Setup – Backend-Deployment und Produktivumgebung konfiguriert
+- **17.08.2025 10:15:** ✅ **Moodle-Integration:** Vollständige Kursanbindung mit 40+ Kategorien implementiert und aktualisiert aufgrund von HSRW Update
+- **17.08.2025 11:15:** ✅ **SSO-Link Update:** Vereinfachte Moodle-Portal Authentifizierung
 
 ### 🎯 Erreichte Ziele
 
@@ -350,17 +350,17 @@ npm run preview         # Build-Vorschau
 
 ### 🔜 Nächste Features
 
-- **🔐 HSRW-SSO Integration** - Authentifizierung über Uni-Accounts
-- **📱 PWA Support** - Offline-Fähigkeit & App-Installation
-- **🔔 Push-Notifications** - Echtzeit-Alerts für News & Mensa
-- **🌐 Internationalisierung** - Deutsch/Englisch Toggle
+- **🔐 HSRW-SSO Integration:** Authentifizierung über Uni-Accounts
+- **📱 PWA Support:** Offline-Fähigkeit & App-Installation
+- **🔔 Push-Notifications:** Echtzeit-Alerts für News & Mensa
+- **🌐 Internationalisierung:** Deutsch/Englisch Toggle
 
 ### 🎯 Langfristige Ziele
 
-- **📊 Analytics Dashboard** - Nutzungsstatistiken
-- **🔍 Globale Suche** - Übergreifende Suchfunktion
-- **🎨 Theming-System** - Dark Mode & Custom Themes
-- **🗓️ Kalender-Sync** - Integration externe Apps
+- **📊 Analytics Dashboard:** Nutzungsstatistiken
+- **🔍 Globale Suche:** Übergreifende Suchfunktion
+- **🎨 Theming-System:** Dark Mode & Custom Themes
+- **🗓️ Kalender-Sync:** Integration externe Apps
 
 ---
 
